@@ -1,9 +1,9 @@
 <template>
-  <div style="height: 100%">
-    <div style="width: 100%; height: 40%; background-color: yellow;">
+  <div style="height: 100%;">
+    <div style="width: 100%; height: 50%; background-color: yellow; display: flex; align-items: center; justify-content: center;">
       <canvas id="canvas1"></canvas>
     </div>
-    <div style="width: 100%; height: 40%; background-color: green;">
+    <div style="width: 100%; height: 50%; background-color: green; display: flex; align-items: center; justify-content: center;">
       <canvas id="canvas2"></canvas>
     </div>
   </div>
