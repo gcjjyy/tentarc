@@ -109,21 +109,31 @@ export default class Game {
 
     public recalcScreenSize(): void {
         if (this.canvas && this.canvas.parentElement) {
-            this.scale = Math.min(
-                Math.floor(this.canvas.parentElement.clientWidth / this.designedWidth),
-                Math.floor(this.canvas.parentElement.clientHeight / this.designedHeight));
+            const scaleX: number = this.canvas.parentElement.clientWidth / this.designedWidth;
+            const scaleY: number = this.canvas.parentElement.clientHeight / this.designedHeight;
 
-            if (this.scale < 1) {
-                this.scale = 1;
-            }
+            this.scale = Math.min(scaleX, scaleY);
 
-            if (this.context2d) {
-                this.context2d.canvas.width = this.designedWidth * this.scale;
-                this.context2d.canvas.height = this.designedHeight * this.scale;
-                this.context2d.imageSmoothingEnabled = false;
+            if (this.scale >= 1) {
+                this.scale = Math.floor(this.scale);
 
-                // For IE11
-                eval('this.context2d.msImageSmoothingEnabled = false;');
+                if (this.context2d) {
+                    this.context2d.canvas.width = this.designedWidth * this.scale;
+                    this.context2d.canvas.height = this.designedHeight * this.scale;
+                    this.context2d.imageSmoothingEnabled = false;
+
+                    // For IE11
+                    eval('this.context2d.msImageSmoothingEnabled = false;');
+                }
+            } else {
+                if (this.context2d) {
+                    this.context2d.canvas.width = this.designedWidth * this.scale;
+                    this.context2d.canvas.height = this.designedHeight * this.scale;
+                    this.context2d.imageSmoothingEnabled = true;
+
+                    // For IE11
+                    eval('this.context2d.msImageSmoothingEnabled = true;');
+                }
             }
         }
 
