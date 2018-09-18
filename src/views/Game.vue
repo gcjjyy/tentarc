@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div>
+    <div style="background-color: yellow;">
       <canvas id="canvas1"></canvas>
     </div>
-    <div>
+    <div style="background-color: green;">
       <canvas id="canvas2"></canvas>
     </div>
   </div>

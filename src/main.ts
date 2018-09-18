@@ -16,7 +16,7 @@ new Vue({
 
 // Main Game Logic
 class Hello extends Game {
-    private fullSize: boolean = false;
+    private fullSize: boolean = true;
     private img: Image | null = null;
     private bgm: Sound | null = null;
 
@@ -47,6 +47,7 @@ class Hello extends Game {
 
     public onResize = (width: number, height: number): void => {
         if (this.fullSize) {
+            console.log('FullSize = ' + width + ', ' + height);
             this.setDesignedScreenSize(width, height);
         }
     }

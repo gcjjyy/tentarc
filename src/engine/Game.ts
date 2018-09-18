@@ -31,6 +31,11 @@ export default class Game {
                     false);
 
                 this.context2d = this.canvas.getContext('2d');
+
+                if (this.canvas.parentElement && this.onResize) {
+                    this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
+                }
+                this.recalcScreenSize(this.designedWidth, this.designedHeight);
             }
 
             this.designedWidth = designedWidth;
@@ -39,16 +44,11 @@ export default class Game {
             if (this.onLoad) {
                 this.onLoad();
             }
-
-            if (this.onResize) {
-                this.onResize(window.innerWidth, window.innerHeight);
-            }
-            this.recalcScreenSize(this.designedWidth, this.designedHeight);
         });
 
         window.addEventListener('resize', (ev: UIEvent): any => {
-            if (this.canvas && this.onResize) {
-                this.onResize(this.canvas.width, this.canvas.height);
+            if (this.canvas && this.canvas.parentElement && this.onResize) {
+                this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
             }
             this.recalcScreenSize(this.designedWidth, this.designedHeight);
         });
