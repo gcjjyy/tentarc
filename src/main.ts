@@ -19,6 +19,8 @@ let img: Image;
 let bgm: Sound;
 
 class Hello extends Game {
+    private fullSize: boolean = false;
+
     public onLoad = (): void => {
         console.log('My OnLoad');
         // Load Image
@@ -30,10 +32,13 @@ class Hello extends Game {
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
                 const go = Game.addGameObject(new Sprite(img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
-                go.onMouseDown = (x: number, y: number) => {
-                    console.log('Index: (' + i + ', ' + j + ')');
-                    console.log('Coord: (' + x + ', ' + y + ')');
-                };
+
+                if (i !== j) {
+                    go.onMouseDown = (x: number, y: number) => {
+                        console.log('Index: (' + i + ', ' + j + ')');
+                        console.log('Coord: (' + x + ', ' + y + ')');
+                    };
+                }
             }
         }
 
@@ -41,7 +46,9 @@ class Hello extends Game {
     }
 
     public onResize = (width: number, height: number): void => {
-        Game.setDesignedScreenSize(width, height);
+        if (this.fullSize) {
+            Game.setDesignedScreenSize(width, height);
+        }
     }
 }
 
