@@ -25,7 +25,7 @@ export default class LogoScene extends Scene {
             for (let j = 0; j < 2; j++) {
                 if (this.img) {
                     const go = this.addGameObject(
-                        new Sprite(this.img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
+                        new Sprite(this.img, 24 * j, 24 * i, 24, 24).setPosition(25 * j, 25 * i));
 
                     if (i !== j) {
                         go.onMouseDown = (x: number, y: number) => {

@@ -41,8 +41,8 @@ class Hello extends Game {
     }
 }
 
-const hello: Hello = new Hello('canvas1', 128, 64);
+const hello: Hello = new Hello('canvas1', 256, 192);
 hello.run();
 
-const hello2: Hello = new Hello('canvas2', 64, 64);
+const hello2: Hello = new Hello('canvas2', 128, 128);
 hello2.run();
