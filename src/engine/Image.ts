@@ -4,14 +4,14 @@ import Resource from './Resource';
 export default class Image extends Resource {
     private image: HTMLImageElement;
 
-    constructor(filename: string) {
+    constructor(game: Game, filename: string) {
         super();
 
         this.image = document.createElement('img');
         this.image.src = filename;
 
-        if (Game.resources) {
-            Game.resources.appendChild(this.image);
+        if (game.resources) {
+            game.resources.appendChild(this.image);
         }
     }
 

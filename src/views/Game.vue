@@ -1,7 +1,11 @@
 <template>
-  <div class="game">
-    <canvas id="canvas"></canvas>
-    <div id="resources"></div>
+  <div>
+    <div>
+      <canvas id="canvas1"></canvas>
+    </div>
+    <div>
+      <canvas id="canvas2"></canvas>
+    </div>
   </div>
 </template>
 
@@ -16,19 +20,12 @@ export default class Game extends Vue {}
 </script>
 
 <style scoped>
-canvas {
+#canvas1 {
   background-color: black;
-  padding: 0;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
 }
 
-#resources {
-  display: none;
+#canvas2 {
+  background-color: blue;
 }
 </style>
 

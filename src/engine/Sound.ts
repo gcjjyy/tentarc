@@ -4,7 +4,7 @@ import Resource from './Resource';
 export default class Sound extends Resource {
     protected audio: HTMLAudioElement;
 
-    constructor(filename: string) {
+    constructor(game: Game, filename: string) {
         super();
 
         this.audio = document.createElement('audio');
@@ -13,8 +13,8 @@ export default class Sound extends Resource {
         this.audio.setAttribute('preload', 'auto');
         this.audio.setAttribute('controls', 'none');
 
-        if (Game.resources) {
-            Game.resources.appendChild(this.audio);
+        if (game.resources) {
+            game.resources.appendChild(this.audio);
         }
     }
 

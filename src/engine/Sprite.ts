@@ -7,8 +7,8 @@ export default class Sprite extends GameObject {
     private sx: number;
     private sy: number;
 
-    constructor(image: Image, sx: number, sy: number, width: number, height: number) {
-        super(width, height);
+    constructor(game: Game, image: Image, sx: number, sy: number, width: number, height: number) {
+        super(game, width, height);
 
         this.sx = sx;
         this.sy = sy;
@@ -16,15 +16,15 @@ export default class Sprite extends GameObject {
     }
 
     public onDraw = (): void => {
-        if (Game.context2d) {
-            Game.context2d.drawImage(
+        if (this.game && this.game.context2d) {
+            this.game.context2d.drawImage(
                 this.image.getImageElement(),
                 this.sx, this.sy,
                 this.getWidth(), this.getHeight(),
-                this.getX() * Game.scale,
-                this.getY() * Game.scale,
-                this.getWidth() * Game.scale,
-                this.getHeight() * Game.scale);
+                this.getX() * this.game.scale,
+                this.getY() * this.game.scale,
+                this.getWidth() * this.game.scale,
+                this.getHeight() * this.game.scale);
         }
     }
 }

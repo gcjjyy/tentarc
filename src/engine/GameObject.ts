@@ -1,6 +1,10 @@
+import Game from './Game';
+
 export default class GameObject {
     public onDraw: (() => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
+
+    protected game: Game | null = null;
 
     private x: number = 0;
     private y: number = 0;
@@ -9,7 +13,8 @@ export default class GameObject {
     private parent: GameObject | null = null;
     private childs: GameObject[] = [];
 
-    constructor(width: number = 0, height: number = 0) {
+    constructor(game: Game, width: number = 0, height: number = 0) {
+        this.game = game;
         this.width = width;
         this.height = height;
     }

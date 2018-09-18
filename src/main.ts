@@ -15,42 +15,45 @@ new Vue({
 }).$mount('#app');
 
 // Main Game Logic
-let img: Image;
-let bgm: Sound;
-
 class Hello extends Game {
     private fullSize: boolean = false;
+    private img: Image | null = null;
+    private bgm: Sound | null = null;
 
     public onLoad = (): void => {
         console.log('My OnLoad');
         // Load Image
-        img = new Image('tileset.png');
+        this.img = new Image(this, 'tileset.png');
 
         // Load Music
-        bgm = new Sound('Beethoven_12_Variation.mp3');
+        this.bgm = new Sound(this, 'Beethoven_12_Variation.mp3');
 
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
-                const go = Game.addGameObject(new Sprite(img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
+                const go = this.addGameObject(
+                    new Sprite(this, this.img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
 
                 if (i !== j) {
                     go.onMouseDown = (x: number, y: number) => {
-                        console.log('Index: (' + i + ', ' + j + ')');
-                        console.log('Coord: (' + x + ', ' + y + ')');
+                        console.log('[' + this.canvasId + '] Index: (' + i + ', ' + j +
+                            ') offset: (' + x + ', ' + y + ')');
                     };
                 }
             }
         }
 
-        document.body.addEventListener('click', () => { bgm.play(); });
+        document.body.addEventListener('click', () => { if (this.bgm) { this.bgm.play(); } });
     }
 
     public onResize = (width: number, height: number): void => {
         if (this.fullSize) {
-            Game.setDesignedScreenSize(width, height);
+            this.setDesignedScreenSize(width, height);
         }
     }
 }
 
-const hello: Hello = new Hello(480, 270);
+const hello: Hello = new Hello('canvas1', 480, 270);
 hello.run();
+
+const hello2: Hello = new Hello('canvas2', 500, 300);
+hello2.run();

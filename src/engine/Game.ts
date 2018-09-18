@@ -1,104 +1,40 @@
 import GameObject from './GameObject';
 
 export default class Game {
-    public static currentGame: Game | null = null;
-    public static canvas: HTMLCanvasElement | null = null;
-    public static resources: HTMLDivElement | null = null;
-    public static designedWidth: number = 0;
-    public static designedHeight: number = 0;
-    public static context2d: CanvasRenderingContext2D | null = null;
-    public static scale: number = 1;
-    public static sceneRoot: GameObject = new GameObject(0, 0);
-
-    public static gameLoop(): void {
-        requestAnimationFrame(Game.gameLoop);
-
-        if (Game.context2d) {
-            Game.context2d.fillStyle = 'black';
-            Game.context2d.fill();
-            Game.context2d.save();
-            Game.sceneRoot.draw();
-            Game.context2d.restore();
-        }
-
-        if (Game.currentGame && Game.currentGame.onFrame) {
-            Game.currentGame.onFrame();
-        }
-    }
-
-    public static recalcScreenSize(width: number, height: number): void {
-        Game.scale = Math.min(
-            Math.floor(window.innerWidth / width),
-            Math.floor(window.innerHeight / height));
-
-        if (Game.scale < 1) {
-            Game.scale = 1;
-        }
-
-        if (Game.context2d) {
-            Game.context2d.canvas.width = width * Game.scale;
-            Game.context2d.canvas.height = height * Game.scale;
-            Game.context2d.imageSmoothingEnabled = false;
-
-            // Below is for IE11
-            eval('document.getElementById("canvas").getContext("2d").msImageSmoothingEnabled = false;');
-        }
-
-        Game.sceneRoot.setWidth(width);
-        Game.sceneRoot.setHeight(height);
-    }
-
-    public static setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
-        Game.designedWidth = designedWidth;
-        Game.designedHeight = designedHeight;
-        Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
-    }
-
-    public static addGameObject(object: GameObject): GameObject {
-        object.setParent(Game.sceneRoot);
-        Game.sceneRoot.addChild(object);
-        return object;
-    }
-
-    public static onMouseDown(ev: MouseEvent): any {
-        let x: number = ev.x;
-        let y: number = ev.y;
-
-        if (Game.canvas) {
-            x -= Game.canvas.offsetLeft;
-            y -= Game.canvas.offsetTop;
-        }
-
-        x = Math.floor(x / Game.scale);
-        y = Math.floor(y / Game.scale);
-
-        const picked = Game.sceneRoot.pickGameObject(x, y);
-
-        if (picked) {
-            if (picked.onMouseDown) {
-                picked.onMouseDown(x - picked.getAbsoluteX(), y - picked.getAbsoluteY());
-            }
-        }
-    }
+    public canvas: HTMLCanvasElement | null = null;
+    public canvasId: string = '';
+    public resources: HTMLDivElement | null = null;
+    public designedWidth: number = 0;
+    public designedHeight: number = 0;
+    public context2d: CanvasRenderingContext2D | null = null;
+    public scale: number = 1;
+    public sceneRoot: GameObject = new GameObject(this, 0, 0);
 
     public onLoad: (() => void) | null = null;
     public onFrame: (() => void) | null = null;
     public onResize: ((width: number, height: number) => void) | null = null;
 
-    constructor(designedWidth: number, designedHeight: number) {
-        Game.currentGame = this;
-        Game.sceneRoot = new GameObject(0, 0);
+    constructor(canvasId: string, designedWidth: number, designedHeight: number) {
+        this.canvasId = canvasId;
 
-        window.onload = (ev: Event): any => {
-            Game.canvas = document.getElementById('canvas') as HTMLCanvasElement;
-            Game.resources = document.getElementById('resources') as HTMLDivElement;
+        window.addEventListener('load', (ev: Event): any => {
+            this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
 
-            Game.canvas.addEventListener('mousedown', Game.onMouseDown, false);
+            if (this.canvas) {
+                this.resources = document.createElement('div') as HTMLDivElement;
+                this.resources.style.display = 'none';
+                this.canvas.appendChild(this.resources);
 
-            Game.context2d = Game.canvas.getContext('2d');
+                this.canvas.addEventListener(
+                    'mousedown',
+                    (event: MouseEvent) => { this.onMouseDown(event); },
+                    false);
 
-            Game.designedWidth = designedWidth;
-            Game.designedHeight = designedHeight;
+                this.context2d = this.canvas.getContext('2d');
+            }
+
+            this.designedWidth = designedWidth;
+            this.designedHeight = designedHeight;
 
             if (this.onLoad) {
                 this.onLoad();
@@ -107,20 +43,86 @@ export default class Game {
             if (this.onResize) {
                 this.onResize(window.innerWidth, window.innerHeight);
             }
-            Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
-        };
+            this.recalcScreenSize(this.designedWidth, this.designedHeight);
+        });
 
-        window.onresize = (ev: UIEvent): any => {
-            if (Game.currentGame) {
-                if (Game.currentGame.onResize) {
-                    Game.currentGame.onResize(window.innerWidth, window.innerHeight);
-                }
-                Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
+        window.addEventListener('resize', (ev: UIEvent): any => {
+            if (this.canvas && this.onResize) {
+                this.onResize(this.canvas.width, this.canvas.height);
             }
-        };
+            this.recalcScreenSize(this.designedWidth, this.designedHeight);
+        });
+    }
+
+    public gameLoop(): void {
+        requestAnimationFrame(() => { this.gameLoop(); });
+
+        if (this.context2d) {
+            this.context2d.fillStyle = 'black';
+            this.context2d.fill();
+            this.context2d.save();
+            this.sceneRoot.draw();
+            this.context2d.restore();
+        }
+
+        if (this.onFrame) {
+            this.onFrame();
+        }
+    }
+
+    public recalcScreenSize(width: number, height: number): void {
+        this.scale = Math.min(
+            Math.floor(window.innerWidth / width),
+            Math.floor(window.innerHeight / height));
+
+        if (this.scale < 1) {
+            this.scale = 1;
+        }
+
+        if (this.context2d) {
+            this.context2d.canvas.width = width * this.scale;
+            this.context2d.canvas.height = height * this.scale;
+            this.context2d.imageSmoothingEnabled = false;
+        }
+
+        this.sceneRoot.setWidth(width);
+        this.sceneRoot.setHeight(height);
+    }
+
+    public setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
+        this.designedWidth = designedWidth;
+        this.designedHeight = designedHeight;
+        this.recalcScreenSize(this.designedWidth, this.designedHeight);
+    }
+
+    public addGameObject(object: GameObject): GameObject {
+        object.setParent(this.sceneRoot);
+        this.sceneRoot.addChild(object);
+        return object;
+    }
+
+    public onMouseDown(ev: MouseEvent): any {
+        let x: number = ev.x;
+        let y: number = ev.y;
+
+        if (this.canvas) {
+            x -= this.canvas.offsetLeft;
+            y -= this.canvas.offsetTop;
+        }
+
+        x = Math.floor(x / this.scale);
+        y = Math.floor(y / this.scale);
+
+        const picked = this.sceneRoot.pickGameObject(x, y);
+
+        if (picked) {
+            if (picked.onMouseDown) {
+                picked.onMouseDown(x - picked.getAbsoluteX(), y - picked.getAbsoluteY());
+            }
+        }
     }
 
     public run(): void {
-        Game.gameLoop();
+        this.gameLoop();
     }
 }
