@@ -85,6 +85,9 @@ export default class Game {
                 this.context2d.canvas.width = width * this.scale;
                 this.context2d.canvas.height = height * this.scale;
                 this.context2d.imageSmoothingEnabled = false;
+
+                // For IE11
+                eval('this.context2d.msImageSmoothingEnabled = false;');
             }
         }
 
