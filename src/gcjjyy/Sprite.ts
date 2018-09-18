@@ -1,4 +1,4 @@
-import GameContext from './GameContext';
+import Game from './Game';
 import GameObject from './GameObject';
 import Image from './Image';
 
@@ -16,15 +16,15 @@ export default class Sprite extends GameObject {
     }
 
     public onDraw = (): void => {
-        if (GameContext.context2d) {
-            GameContext.context2d.drawImage(
+        if (Game.context2d) {
+            Game.context2d.drawImage(
                 this.image.getImageElement(),
                 this.sx, this.sy,
                 this.getWidth(), this.getHeight(),
-                this.getX() * GameContext.scale,
-                this.getY() * GameContext.scale,
-                this.getWidth() * GameContext.scale,
-                this.getHeight() * GameContext.scale);
+                this.getX() * Game.scale,
+                this.getY() * Game.scale,
+                this.getWidth() * Game.scale,
+                this.getHeight() * Game.scale);
         }
     }
 }

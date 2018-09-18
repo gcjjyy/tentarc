@@ -1,4 +1,4 @@
-import GameContext from './GameContext';
+import Game from './Game';
 import Resource from './Resource';
 
 export default class Sound extends Resource {
@@ -13,8 +13,8 @@ export default class Sound extends Resource {
         this.audio.setAttribute('preload', 'auto');
         this.audio.setAttribute('controls', 'none');
 
-        if (GameContext.resources) {
-            GameContext.resources.appendChild(this.audio);
+        if (Game.resources) {
+            Game.resources.appendChild(this.audio);
         }
     }
 

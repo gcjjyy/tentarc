@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import * as gcjjyy from '@/gcjjyy/gcjjyy';
 import Game from '@/gcjjyy/Game';
 import GameObject from '@/gcjjyy/GameObject';
 import Image from '@/gcjjyy/Image';
@@ -20,10 +19,6 @@ let img: Image;
 // let bgm: gcjjyy.Sound;
 
 class Hello extends Game {
-    constructor() {
-        super();
-    }
-
     public onLoad = (): void => {
         console.log('My OnLoad');
         // Load Image
@@ -34,7 +29,7 @@ class Hello extends Game {
 
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
-                const go = gcjjyy.addGameObject(new Sprite(img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
+                const go = this.addGameObject(new Sprite(img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
                 go.onMouseDown = (x: number, y: number) => {
                     console.log('Index: (' + i + ', ' + j + ')');
                     console.log('Coord: (' + x + ', ' + y + ')');
@@ -50,4 +45,5 @@ class Hello extends Game {
     }
 }
 
-gcjjyy.run(new Hello(), 480, 270);
+const hello: Hello = new Hello(480, 270);
+hello.run();

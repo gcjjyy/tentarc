@@ -1,4 +1,4 @@
-import GameContext from './GameContext';
+import Game from './Game';
 import Resource from './Resource';
 
 export default class Image extends Resource {
@@ -10,8 +10,8 @@ export default class Image extends Resource {
         this.image = document.createElement('img');
         this.image.src = filename;
 
-        if (GameContext.resources) {
-            GameContext.resources.appendChild(this.image);
+        if (Game.resources) {
+            Game.resources.appendChild(this.image);
         }
     }
 
