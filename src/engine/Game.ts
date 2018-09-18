@@ -61,7 +61,7 @@ export default class Game {
         this.sceneStack.push(scene);
 
         if (scene.onPush) {
-            scene.onPush(this);
+            scene.onPush();
         }
 
         this.invalidate();

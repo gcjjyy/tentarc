@@ -5,17 +5,21 @@ import Sound from '@/engine/Sound';
 import Sprite from '@/engine/Sprite';
 
 export default class GameScene extends Scene {
-    private img: Image | null = null;
-    private bgm: Sound | null = null;
+    private img: Image | null;
+    private bgm: Sound | null;
 
-    public onPush = (game: Game): void => {
-        console.log('GameScene push');
+    constructor(game: Game) {
+        super(game);
 
         // Load Image
         this.img = new Image(game, 'tileset.png');
 
         // Load Music
         this.bgm = new Sound(game, 'Beethoven_12_Variation.mp3');
+    }
+
+    public onPush = (): void => {
+        console.log('GameScene push');
 
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {

@@ -36,7 +36,6 @@ class Hello extends Game {
 
     public onResize = (width: number, height: number): void => {
         if (this.fullSize) {
-            console.log('FullSize = ' + width + ', ' + height);
             this.setDesignedScreenSize(width, height);
         }
     }

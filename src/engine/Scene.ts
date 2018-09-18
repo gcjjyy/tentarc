@@ -2,7 +2,7 @@ import Game from './Game';
 import GameObject from './GameObject';
 
 export default class Scene extends GameObject {
-    public onPush: ((game: Game) => void) | null = null;
+    public onPush: (() => void) | null = null;
     public onPop: (() => void) | null = null;
 
     protected game: Game | null = null;
