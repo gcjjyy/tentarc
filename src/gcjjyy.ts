@@ -1,6 +1,8 @@
 let g_currentGame: Game;
 let g_canvas: HTMLCanvasElement;
 let g_resources: HTMLDivElement;
+let g_designedWidth: number;
+let g_designedHeight: number;
 let g_ctx: CanvasRenderingContext2D | null;
 let g_scale: number;
 
@@ -169,6 +171,7 @@ export class Game {
 
     public onLoad = (): void => {};
     public onFrame = (): void => {};
+    public onResize = (width: number, height: number): void => {};
 }
 
 function gameLoop(): void {
@@ -208,6 +211,12 @@ function recalcScreenSize(width: number, height: number): void {
     g_sceneRoot.setHeight(height);
 }
 
+export function setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
+    g_designedWidth = designedWidth;
+    g_designedHeight = designedHeight;
+    recalcScreenSize(g_designedWidth, g_designedHeight);
+}
+
 export function addGameObject(object: GameObject): GameObject {
     object.setParent(g_sceneRoot);
     g_sceneRoot.addChild(object);
@@ -244,14 +253,19 @@ export function run(game: Game, designedWidth: number, designedHeight: number): 
 
         g_ctx = g_canvas.getContext('2d');
     
-        recalcScreenSize(designedWidth, designedHeight);
+        g_designedWidth = designedWidth;
+        g_designedHeight = designedHeight;
     
         g_currentGame.onLoad();
+
+        g_currentGame.onResize(window.innerWidth, window.innerHeight);
+        recalcScreenSize(g_designedWidth, g_designedHeight);
     
         gameLoop();
     }
 
     window.onresize = (ev: UIEvent): any => {
-        recalcScreenSize(designedWidth, designedHeight);
+        g_currentGame.onResize(window.innerWidth, window.innerHeight);
+        recalcScreenSize(g_designedWidth, g_designedHeight);
     }
 }

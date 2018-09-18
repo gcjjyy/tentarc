@@ -39,9 +39,13 @@ class Hello extends gcjjyy.Game {
 
         //document.body.addEventListener("click", () => { bgm.play(); });
     }
+
+    public onResize = (width: number, height: number): void => {
+        //gcjjyy.setDesignedScreenSize(width, height);
+    }
 }
 
-gcjjyy.run(new Hello(), 320, 180);
+gcjjyy.run(new Hello(), 480, 270);
 </script>
 
 <style scoped>
