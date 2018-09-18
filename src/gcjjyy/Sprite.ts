@@ -16,15 +16,15 @@ export default class Sprite extends GameObject {
     }
 
     public onDraw = (): void => {
-        if (GameContext.instance.context2d) {
-            GameContext.instance.context2d.drawImage(
+        if (GameContext.context2d) {
+            GameContext.context2d.drawImage(
                 this.image.getImageElement(),
                 this.sx, this.sy,
                 this.getWidth(), this.getHeight(),
-                this.getX() * GameContext.instance.scale,
-                this.getY() * GameContext.instance.scale,
-                this.getWidth() * GameContext.instance.scale,
-                this.getHeight() * GameContext.instance.scale);
+                this.getX() * GameContext.scale,
+                this.getY() * GameContext.scale,
+                this.getWidth() * GameContext.scale,
+                this.getHeight() * GameContext.scale);
         }
     }
 }

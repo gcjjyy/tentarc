@@ -10,8 +10,8 @@ export default class Image extends Resource {
         this.image = document.createElement('img');
         this.image.src = filename;
 
-        if (GameContext.instance.resources) {
-            GameContext.instance.resources.appendChild(this.image);
+        if (GameContext.resources) {
+            GameContext.resources.appendChild(this.image);
         }
     }
 

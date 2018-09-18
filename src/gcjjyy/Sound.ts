@@ -13,8 +13,8 @@ export default class Sound extends Resource {
         this.audio.setAttribute('preload', 'auto');
         this.audio.setAttribute('controls', 'none');
 
-        if (GameContext.instance.resources) {
-            GameContext.instance.resources.appendChild(this.audio);
+        if (GameContext.resources) {
+            GameContext.resources.appendChild(this.audio);
         }
     }
 

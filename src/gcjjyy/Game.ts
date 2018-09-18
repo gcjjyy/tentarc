@@ -7,7 +7,7 @@ export default class Game {
     public onResize: ((width: number, height: number) => void) | null = null;
 
     constructor() {
-        GameContext.instance.currentGame = this;
-        GameContext.instance.sceneRoot = new GameObject(0, 0);
+        GameContext.currentGame = this;
+        GameContext.sceneRoot = new GameObject(0, 0);
     }
 }
