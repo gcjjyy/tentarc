@@ -1,4 +1,4 @@
-import GameObject from '@/gcjjyy/GameObject';
+import GameObject from './GameObject';
 
 export default class Game {
     public static currentGame: Game | null = null;

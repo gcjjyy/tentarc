@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import Game from '@/gcjjyy/Game';
-import GameObject from '@/gcjjyy/GameObject';
-import Image from '@/gcjjyy/Image';
-import Sound from '@/gcjjyy/Sound';
-import Sprite from '@/gcjjyy/Sprite';
+import Game from '@/engine/Game';
+import GameObject from '@/engine/GameObject';
+import Image from '@/engine/Image';
+import Sound from '@/engine/Sound';
+import Sprite from '@/engine/Sprite';
 
 Vue.config.productionTip = false;
 
@@ -16,7 +16,7 @@ new Vue({
 
 // Main Game Logic
 let img: Image;
-// let bgm: gcjjyy.Sound;
+let bgm: Sound;
 
 class Hello extends Game {
     public onLoad = (): void => {
@@ -25,7 +25,7 @@ class Hello extends Game {
         img = new Image('tileset.png');
 
         // Load Music
-        // bgm = new gcjjyy.Sound('Defqwop - Awakening [NCS Release].mp3');
+        bgm = new Sound('Beethoven_12_Variation.mp3');
 
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
@@ -37,11 +37,11 @@ class Hello extends Game {
             }
         }
 
-        // document.body.addEventListener("click", () => { bgm.play(); });
+        document.body.addEventListener('click', () => { bgm.play(); });
     }
 
     public onResize = (width: number, height: number): void => {
-        // gcjjyy.setDesignedScreenSize(width, height);
+        Game.setDesignedScreenSize(width, height);
     }
 }
 
