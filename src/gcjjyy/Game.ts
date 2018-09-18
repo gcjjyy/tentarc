@@ -26,50 +26,7 @@ export default class Game {
         }
     }
 
-    public onLoad: (() => void) | null = null;
-    public onFrame: (() => void) | null = null;
-    public onResize: ((width: number, height: number) => void) | null = null;
-
-    constructor(designedWidth: number, designedHeight: number) {
-        Game.currentGame = this;
-        Game.sceneRoot = new GameObject(0, 0);
-
-        window.onload = (ev: Event): any => {
-            Game.canvas = document.getElementById('canvas') as HTMLCanvasElement;
-            Game.resources = document.getElementById('resources') as HTMLDivElement;
-
-            Game.canvas.addEventListener('mousedown', this.onMouseDown, false);
-
-            Game.context2d = Game.canvas.getContext('2d');
-
-            Game.designedWidth = designedWidth;
-            Game.designedHeight = designedHeight;
-
-            if (this.onLoad) {
-                this.onLoad();
-            }
-
-            if (this.onResize) {
-                this.onResize(window.innerWidth, window.innerHeight);
-            }
-            this.recalcScreenSize(Game.designedWidth, Game.designedHeight);
-        };
-
-        window.onresize = (ev: UIEvent): any => {
-            if (Game.currentGame) {
-                if (Game.currentGame.onResize) {
-                    Game.currentGame.onResize(window.innerWidth, window.innerHeight);
-                }
-                this.recalcScreenSize(Game.designedWidth, Game.designedHeight);
-            }
-        };
-    }
-
-    public run(): void {
-        Game.gameLoop();
-    }
-
-    public recalcScreenSize(width: number, height: number): void {
+    public static recalcScreenSize(width: number, height: number): void {
         Game.scale = Math.min(
             Math.floor(window.innerWidth / width),
             Math.floor(window.innerHeight / height));
@@ -91,19 +48,19 @@ export default class Game {
         Game.sceneRoot.setHeight(height);
     }
 
-    public setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
+    public static setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
         Game.designedWidth = designedWidth;
         Game.designedHeight = designedHeight;
-        this.recalcScreenSize(Game.designedWidth, Game.designedHeight);
+        Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
     }
 
-    public addGameObject(object: GameObject): GameObject {
+    public static addGameObject(object: GameObject): GameObject {
         object.setParent(Game.sceneRoot);
         Game.sceneRoot.addChild(object);
         return object;
     }
 
-    public onMouseDown(ev: MouseEvent): any {
+    public static onMouseDown(ev: MouseEvent): any {
         let x: number = ev.x;
         let y: number = ev.y;
 
@@ -122,5 +79,48 @@ export default class Game {
                 picked.onMouseDown(x - picked.getAbsoluteX(), y - picked.getAbsoluteY());
             }
         }
+    }
+
+    public onLoad: (() => void) | null = null;
+    public onFrame: (() => void) | null = null;
+    public onResize: ((width: number, height: number) => void) | null = null;
+
+    constructor(designedWidth: number, designedHeight: number) {
+        Game.currentGame = this;
+        Game.sceneRoot = new GameObject(0, 0);
+
+        window.onload = (ev: Event): any => {
+            Game.canvas = document.getElementById('canvas') as HTMLCanvasElement;
+            Game.resources = document.getElementById('resources') as HTMLDivElement;
+
+            Game.canvas.addEventListener('mousedown', Game.onMouseDown, false);
+
+            Game.context2d = Game.canvas.getContext('2d');
+
+            Game.designedWidth = designedWidth;
+            Game.designedHeight = designedHeight;
+
+            if (this.onLoad) {
+                this.onLoad();
+            }
+
+            if (this.onResize) {
+                this.onResize(window.innerWidth, window.innerHeight);
+            }
+            Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
+        };
+
+        window.onresize = (ev: UIEvent): any => {
+            if (Game.currentGame) {
+                if (Game.currentGame.onResize) {
+                    Game.currentGame.onResize(window.innerWidth, window.innerHeight);
+                }
+                Game.recalcScreenSize(Game.designedWidth, Game.designedHeight);
+            }
+        };
+    }
+
+    public run(): void {
+        Game.gameLoop();
     }
 }
