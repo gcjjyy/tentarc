@@ -16,7 +16,7 @@ new Vue({
 
 // Main Game Logic
 class Hello extends Game {
-    private fullSize: boolean = true;
+    private fullSize: boolean = false;
     private img: Image | null = null;
     private bgm: Sound | null = null;
 
@@ -28,8 +28,8 @@ class Hello extends Game {
         // Load Music
         this.bgm = new Sound(this, 'Beethoven_12_Variation.mp3');
 
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < 2; j++) {
                 const go = this.addGameObject(
                     new Sprite(this, this.img, 32 * j, 32 * i, 16, 16).setPosition(17 * j, 17 * i));
 
@@ -53,8 +53,8 @@ class Hello extends Game {
     }
 }
 
-const hello: Hello = new Hello('canvas1', 480, 270);
+const hello: Hello = new Hello('canvas1', 128, 64);
 hello.run();
 
-const hello2: Hello = new Hello('canvas2', 500, 300);
+const hello2: Hello = new Hello('canvas2', 64, 64);
 hello2.run();

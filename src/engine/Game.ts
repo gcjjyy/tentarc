@@ -31,11 +31,6 @@ export default class Game {
                     false);
 
                 this.context2d = this.canvas.getContext('2d');
-
-                if (this.canvas.parentElement && this.onResize) {
-                    this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
-                }
-                this.recalcScreenSize(this.designedWidth, this.designedHeight);
             }
 
             this.designedWidth = designedWidth;
@@ -44,13 +39,12 @@ export default class Game {
             if (this.onLoad) {
                 this.onLoad();
             }
+
+            this.refreshScreenSize();
         });
 
         window.addEventListener('resize', (ev: UIEvent): any => {
-            if (this.canvas && this.canvas.parentElement && this.onResize) {
-                this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
-            }
-            this.recalcScreenSize(this.designedWidth, this.designedHeight);
+            this.refreshScreenSize();
         });
     }
 
@@ -70,19 +64,28 @@ export default class Game {
         }
     }
 
-    public recalcScreenSize(width: number, height: number): void {
-        this.scale = Math.min(
-            Math.floor(window.innerWidth / width),
-            Math.floor(window.innerHeight / height));
-
-        if (this.scale < 1) {
-            this.scale = 1;
+    public refreshScreenSize(): void {
+        if (this.canvas && this.canvas.parentElement && this.onResize) {
+            this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
         }
+        this.recalcScreenSize(this.designedWidth, this.designedHeight);
+    }
 
-        if (this.context2d) {
-            this.context2d.canvas.width = width * this.scale;
-            this.context2d.canvas.height = height * this.scale;
-            this.context2d.imageSmoothingEnabled = false;
+    public recalcScreenSize(width: number, height: number): void {
+        if (this.canvas && this.canvas.parentElement) {
+            this.scale = Math.min(
+                Math.floor(this.canvas.parentElement.clientWidth / width),
+                Math.floor(this.canvas.parentElement.clientHeight / height));
+
+            if (this.scale < 1) {
+                this.scale = 1;
+            }
+
+            if (this.context2d) {
+                this.context2d.canvas.width = width * this.scale;
+                this.context2d.canvas.height = height * this.scale;
+                this.context2d.imageSmoothingEnabled = false;
+            }
         }
 
         this.sceneRoot.setWidth(width);
