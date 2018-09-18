@@ -5,7 +5,7 @@ export default class Scene extends GameObject {
     public onPush: (() => void) | null = null;
     public onPop: (() => void) | null = null;
 
-    protected game: Game | null = null;
+    protected game: Game;
 
     constructor(game: Game) {
         super(game.designedWidth, game.designedHeight);

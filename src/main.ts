@@ -15,23 +15,11 @@ new Vue({
 
 class Hello extends Game {
     private fullSize: boolean = false;
-    private push: boolean = true;
 
     public onLoad = (): void => {
         console.log('My OnLoad');
 
         this.pushScene(new LogoScene(this));
-
-        // document.body.addEventListener('click', () => { if (this.bgm) { this.bgm.play(); } });
-        document.body.addEventListener('click', () => {
-            if (this.push) {
-                this.pushScene(new GameScene(this));
-                this.push = false;
-            } else {
-                this.popScene();
-                this.push = true;
-            }
-        });
     }
 
     public onResize = (width: number, height: number): void => {
