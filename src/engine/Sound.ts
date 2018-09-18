@@ -9,7 +9,7 @@ export default class Sound extends Resource {
 
         this.audio = document.createElement('audio');
         this.audio.src = filename;
-        this.audio.autoplay = true;
+        this.audio.autoplay = false;
         this.audio.setAttribute('preload', 'auto');
         this.audio.setAttribute('controls', 'none');
 

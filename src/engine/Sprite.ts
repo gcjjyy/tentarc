@@ -7,24 +7,22 @@ export default class Sprite extends GameObject {
     private sx: number;
     private sy: number;
 
-    constructor(game: Game, image: Image, sx: number, sy: number, width: number, height: number) {
-        super(game, width, height);
+    constructor(image: Image, sx: number, sy: number, width: number, height: number) {
+        super(width, height);
 
         this.sx = sx;
         this.sy = sy;
         this.image = image;
     }
 
-    public onDraw = (): void => {
-        if (this.game && this.game.context2d) {
-            this.game.context2d.drawImage(
-                this.image.getImageElement(),
-                this.sx, this.sy,
-                this.getWidth(), this.getHeight(),
-                this.getX() * this.game.scale,
-                this.getY() * this.game.scale,
-                this.getWidth() * this.game.scale,
-                this.getHeight() * this.game.scale);
-        }
+    public onDraw = (context2d: CanvasRenderingContext2D, scale: number): void => {
+        context2d.drawImage(
+            this.image.getImageElement(),
+            this.sx, this.sy,
+            this.getWidth(), this.getHeight(),
+            this.getX() * scale,
+            this.getY() * scale,
+            this.getWidth() * scale,
+            this.getHeight() * scale);
     }
 }

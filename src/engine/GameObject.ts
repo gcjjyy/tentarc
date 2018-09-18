@@ -1,10 +1,8 @@
 import Game from './Game';
 
 export default class GameObject {
-    public onDraw: (() => void) | null = null;
+    public onDraw: ((context2d: CanvasRenderingContext2D, scale: number) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
-
-    protected game: Game | null = null;
 
     private x: number = 0;
     private y: number = 0;
@@ -13,10 +11,9 @@ export default class GameObject {
     private parent: GameObject | null = null;
     private childs: GameObject[] = [];
 
-    constructor(game: Game, width: number = 0, height: number = 0) {
-        this.game = game;
-        this.width = width;
-        this.height = height;
+    constructor(width: number, height: number) {
+        this.setWidth(width);
+        this.setHeight(height);
     }
 
     public setPosition(x: number, y: number): GameObject {
@@ -52,22 +49,23 @@ export default class GameObject {
         }
     }
 
-    public setParent(object: GameObject): void {
+    public setParent(object: GameObject | null): void {
         this.parent = object;
     }
 
     public addChild(object: GameObject): GameObject {
+        object.setParent(this);
         this.childs.push(object);
         return object;
     }
 
-    public draw(): void {
+    public draw(context2d: CanvasRenderingContext2D, scale: number): void {
         if (this.onDraw) {
-            this.onDraw();
+            this.onDraw(context2d, scale);
         }
 
         for (const child of this.childs) {
-            child.draw();
+            child.draw(context2d, scale);
         }
     }
 
