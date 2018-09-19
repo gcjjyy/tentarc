@@ -15,8 +15,12 @@ export default class Game {
     public onLoad: (() => void) | null = null;
     public onResize: ((width: number, height: number) => void) | null = null;
 
+    private lastTime: number;
+
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
         this.canvasId = canvasId;
+
+        this.lastTime = Date.now();
 
         window.addEventListener('load', (ev: Event): any => {
             this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -86,6 +90,9 @@ export default class Game {
     }
 
     public gameLoop(): void {
+        const dt: number = Date.now() - this.lastTime;
+        this.lastTime = Date.now();
+
         requestAnimationFrame(() => { this.gameLoop(); });
 
         if (this.context2d) {
@@ -95,7 +102,7 @@ export default class Game {
 
             const currentScene = this.getCurrentScene();
             if (currentScene) {
-                currentScene.update();
+                currentScene.update(dt);
                 currentScene.draw(this.context2d, this.scale);
             }
             this.context2d.restore();

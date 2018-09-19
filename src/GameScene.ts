@@ -8,7 +8,7 @@ export default class GameScene extends Scene {
     private tileSet: TileSet;
 
     private map: TileMap;
-    private keyCode: number = 0;
+    private keyDown: boolean[] = [];
 
     constructor(game: Game) {
         super(game);
@@ -30,21 +30,24 @@ export default class GameScene extends Scene {
         console.log('GameScene Hide');
     }
 
-    public onKeyDown = (key: string, keyCode: number): void => {
-        switch (keyCode) {
-            case 37:
+    public onUpdate = (dt: number): void => {
+        if (this.keyDown[37]) {
             this.map.setX(this.map.getX() - 5);
-            break;
-            case 38:
+        } else if (this.keyDown[38]) {
             this.map.setY(this.map.getY() - 5);
-            break;
-            case 39:
+        } else if (this.keyDown[39]) {
             this.map.setX(this.map.getX() + 5);
-            break;
-            case 40:
+        } else if (this.keyDown[40]) {
             this.map.setY(this.map.getY() + 5);
-            break;
         }
+    }
+
+    public onKeyDown = (key: string, keyCode: number): void => {
+        this.keyDown[keyCode] = true;
+    }
+
+    public onKeyUp = (key: string, keyCode: number): void => {
+        this.keyDown[keyCode] = false;
     }
 
     public onMouseDown = (x: number, y: number): void => {

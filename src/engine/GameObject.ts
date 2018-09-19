@@ -1,7 +1,7 @@
 import Game from './Game';
 
 export default class GameObject {
-    public onUpdate: (() => void) | null = null;
+    public onUpdate: ((dt: number) => void) | null = null;
     public onDraw: ((context2d: CanvasRenderingContext2D, scale: number) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
@@ -62,13 +62,13 @@ export default class GameObject {
         return object;
     }
 
-    public update(): void {
+    public update(dt: number): void {
         if (this.onUpdate) {
-            this.onUpdate();
+            this.onUpdate(dt);
         }
 
         for (const child of this.childs) {
-            child.update();
+            child.update(dt);
         }
     }
 
