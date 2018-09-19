@@ -40,6 +40,10 @@ export default class LogoScene extends Scene {
         console.log('LogoScene pop');
     }
 
+    public onKeyDown = (key: string, keyCode: number): void => {
+        console.log('LogoScene keydown: ' + key + '(' + keyCode + ')');
+    }
+
     public onMouseDown = (x: number, y: number): void => {
         this.game.pushScene(new GameScene(this.game));
     }

@@ -26,13 +26,11 @@ export default class Game {
                 this.resources = document.createElement('div') as HTMLDivElement;
                 this.resources.style.display = 'none';
                 this.canvas.appendChild(this.resources);
-
-                this.canvas.addEventListener(
-                    'mousedown',
-                    (event: MouseEvent) => { this.onMouseDown(event); },
-                    false);
-
                 this.context2d = this.canvas.getContext('2d');
+
+                this.canvas.addEventListener('mousedown', (event: MouseEvent) => {
+                    this.onMouseDown(event);
+                });
             }
 
             this.designedWidth = designedWidth;
@@ -48,9 +46,13 @@ export default class Game {
         window.addEventListener('resize', (ev: UIEvent): any => {
             this.refreshScreenSize();
         });
+
+        window.addEventListener('keydown', (ev: KeyboardEvent) => {
+            this.onKeyDown(ev);
+        });
     }
 
-    public invalidate(): void {
+    public redraw(): void {
         if (this.context2d) {
             this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
         }
@@ -64,7 +66,7 @@ export default class Game {
             scene.onPush();
         }
 
-        this.invalidate();
+        this.redraw();
 
         return scene;
     }
@@ -77,7 +79,7 @@ export default class Game {
 
         this.sceneStack.pop();
 
-        this.invalidate();
+        this.redraw();
     }
 
     public gameLoop(): void {
@@ -147,6 +149,13 @@ export default class Game {
         this.designedWidth = designedWidth;
         this.designedHeight = designedHeight;
         this.recalcScreenSize();
+    }
+
+    public onKeyDown(ev: KeyboardEvent): any {
+        const currentScene = this.getCurrentScene();
+        if (currentScene && currentScene.onKeyDown) {
+            currentScene.onKeyDown(ev.key, ev.keyCode);
+        }
     }
 
     public onMouseDown(ev: MouseEvent): any {

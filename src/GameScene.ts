@@ -39,6 +39,10 @@ export default class GameScene extends Scene {
         console.log('GameScene pop');
     }
 
+    public onKeyDown = (key: string, keyCode: number): void => {
+        console.log('GameScene keydown: ' + key + '(' + keyCode + ')');
+    }
+
     public onMouseDown = (x: number, y: number): void => {
         this.game.popScene();
     }
