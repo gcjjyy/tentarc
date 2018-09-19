@@ -20,9 +20,17 @@ export default class Sprite extends GameObject {
             this.image.getImageElement(),
             this.sx, this.sy,
             this.getWidth(), this.getHeight(),
-            this.getX() * scale,
-            this.getY() * scale,
+            this.getAbsoluteX() * scale,
+            this.getAbsoluteY() * scale,
             this.getWidth() * scale,
             this.getHeight() * scale);
+    }
+
+    public setSourceX(sx: number): void {
+        this.sx = sx;
+    }
+
+    public setSourceY(sy: number): void {
+        this.sy = sy;
     }
 }

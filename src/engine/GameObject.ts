@@ -1,9 +1,11 @@
 import Game from './Game';
 
 export default class GameObject {
+    public onUpdate: (() => void) | null = null;
     public onDraw: ((context2d: CanvasRenderingContext2D, scale: number) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
+    public onKeyUp: ((key: string, keyCode: number) => void) | null = null;
 
     private x: number = 0;
     private y: number = 0;
@@ -58,6 +60,16 @@ export default class GameObject {
         object.setParent(this);
         this.childs.push(object);
         return object;
+    }
+
+    public update(): void {
+        if (this.onUpdate) {
+            this.onUpdate();
+        }
+
+        for (const child of this.childs) {
+            child.update();
+        }
     }
 
     public draw(context2d: CanvasRenderingContext2D, scale: number): void {

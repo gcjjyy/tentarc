@@ -13,7 +13,6 @@ export default class Game {
     public sceneStack: Scene[] = [];
 
     public onLoad: (() => void) | null = null;
-    public onFrame: (() => void) | null = null;
     public onResize: ((width: number, height: number) => void) | null = null;
 
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
@@ -49,6 +48,10 @@ export default class Game {
 
         window.addEventListener('keydown', (ev: KeyboardEvent) => {
             this.onKeyDown(ev);
+        });
+
+        window.addEventListener('keyup', (ev: KeyboardEvent) => {
+            this.onKeyUp(ev);
         });
     }
 
@@ -92,13 +95,10 @@ export default class Game {
 
             const currentScene = this.getCurrentScene();
             if (currentScene) {
+                currentScene.update();
                 currentScene.draw(this.context2d, this.scale);
             }
             this.context2d.restore();
-        }
-
-        if (this.onFrame) {
-            this.onFrame();
         }
     }
 
@@ -155,6 +155,13 @@ export default class Game {
         const currentScene = this.getCurrentScene();
         if (currentScene && currentScene.onKeyDown) {
             currentScene.onKeyDown(ev.key, ev.keyCode);
+        }
+    }
+
+    public onKeyUp(ev: KeyboardEvent): any {
+        const currentScene = this.getCurrentScene();
+        if (currentScene && currentScene.onKeyUp) {
+            currentScene.onKeyUp(ev.key, ev.keyCode);
         }
     }
 
