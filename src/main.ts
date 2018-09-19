@@ -19,7 +19,7 @@ class Hello extends Game {
     public onLoad = (): void => {
         console.log('My OnLoad');
 
-        this.pushScene(new LogoScene(this));
+        this.pushScene(new LogoScene(this, this.designedWidth, this.designedHeight));
     }
 
     public onResize = (width: number, height: number): void => {

@@ -11,8 +11,8 @@ export default class GameScene extends Scene {
     private map: number[][];
     private keyCode: number = 0;
 
-    constructor(game: Game) {
-        super(game);
+    constructor(game: Game, width: number, height: number) {
+        super(game, width, height);
 
         // Load Image
         this.img = new Image(game, 'tileset.png');

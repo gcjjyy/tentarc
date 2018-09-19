@@ -9,8 +9,8 @@ export default class LogoScene extends Scene {
     private img: Image;
     private bgm: Sound;
 
-    constructor(game: Game) {
-        super(game);
+    constructor(game: Game, width: number, height: number) {
+        super(game, width, height);
 
         // Load Image
         this.img = new Image(game, 'tileset.png');
@@ -45,6 +45,6 @@ export default class LogoScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.game.pushScene(new GameScene(this.game));
+        this.game.pushScene(new GameScene(this.game, 64 * 24, 64 * 24));
     }
 }

@@ -7,9 +7,8 @@ export default class Scene extends GameObject {
 
     protected game: Game;
 
-    constructor(game: Game) {
-        super(game.designedWidth, game.designedHeight);
-
+    constructor(game: Game, width: number, height: number) {
+        super(width, height);
         this.game = game;
     }
 
