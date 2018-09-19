@@ -30,6 +30,23 @@ export default class GameScene extends Scene {
         console.log('GameScene Hide');
     }
 
+    public onKeyDown = (key: string, keyCode: number): void => {
+        switch (keyCode) {
+            case 37:
+            this.map.setX(this.map.getX() - 5);
+            break;
+            case 38:
+            this.map.setY(this.map.getY() - 5);
+            break;
+            case 39:
+            this.map.setX(this.map.getX() + 5);
+            break;
+            case 40:
+            this.map.setY(this.map.getY() + 5);
+            break;
+        }
+    }
+
     public onMouseDown = (x: number, y: number): void => {
         this.game.popScene();
     }

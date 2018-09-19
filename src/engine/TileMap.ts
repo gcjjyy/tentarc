@@ -33,8 +33,18 @@ export default class TileMap extends GameObject {
         const absX: number = this.getAbsoluteX();
         const absY: number = this.getAbsoluteY();
 
-        for (let i = 0; i < this.mapHeight; i++) {
-            for (let j = 0; j < this.mapWidth; j++) {
+        // Get starting offset position
+        const startX: number = Math.max(Math.floor((absX * (-1)) / tileWidth), 0);
+        const startY: number = Math.max(Math.floor((absY * (-1)) / tileHeight), 0);
+        const endX: number = Math.min(
+            startX + Math.ceil(context2d.canvas.clientWidth / tileWidth) + 1,
+            this.mapWidth);
+        const endY: number = Math.min(
+            startY + Math.ceil(context2d.canvas.clientHeight / tileHeight) + 1,
+            this.mapHeight);
+
+        for (let i = startY; i < endY; i++) {
+            for (let j = startX; j < endX; j++) {
                 const tileNum: number = this.mapData[i][j];
                 context2d.drawImage(
                     this.tileSet.getImageElement(),
