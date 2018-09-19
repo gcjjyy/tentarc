@@ -1,14 +1,21 @@
 import Game from './Game';
 import GameObject from './GameObject';
 
+/**
+ * Important!!
+ * -----------
+ * 1. Do not call the set position and size methods.
+ *    such as setX, setY, setWidth, setHeight.
+ *    Because the position and size of the Scene will be used for picking objects.
+ */
 export default class Scene extends GameObject {
-    public onPush: (() => void) | null = null;
-    public onPop: (() => void) | null = null;
+    public onShow: (() => void) | null = null;
+    public onHide: (() => void) | null = null;
 
     protected game: Game;
 
-    constructor(game: Game, width: number, height: number) {
-        super(width, height);
+    constructor(game: Game) {
+        super(game.designedWidth, game.designedHeight);
         this.game = game;
     }
 

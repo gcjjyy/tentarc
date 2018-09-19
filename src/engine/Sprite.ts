@@ -1,4 +1,3 @@
-import Game from './Game';
 import GameObject from './GameObject';
 import Image from './Image';
 

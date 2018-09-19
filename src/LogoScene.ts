@@ -9,8 +9,8 @@ export default class LogoScene extends Scene {
     private img: Image;
     private bgm: Sound;
 
-    constructor(game: Game, width: number, height: number) {
-        super(game, width, height);
+    constructor(game: Game) {
+        super(game);
 
         // Load Image
         this.img = new Image(game, 'tileset.png');
@@ -19,8 +19,8 @@ export default class LogoScene extends Scene {
         this.bgm = new Sound(game, 'Beethoven_12_Variation.mp3');
     }
 
-    public onPush = (): void => {
-        console.log('LogoScene push');
+    public onShow = (): void => {
+        console.log('LogoScene Show');
 
         for (let i = 0; i < 2; i++) {
             for (let j = 0; j < 2; j++) {
@@ -36,8 +36,8 @@ export default class LogoScene extends Scene {
         }
     }
 
-    public onPop = (): void => {
-        console.log('LogoScene pop');
+    public onHide = (): void => {
+        console.log('LogoScene Hide');
     }
 
     public onKeyDown = (key: string, keyCode: number): void => {
@@ -45,6 +45,6 @@ export default class LogoScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.game.pushScene(new GameScene(this.game, 64 * 24, 64 * 24));
+        this.game.pushScene(new GameScene(this.game));
     }
 }

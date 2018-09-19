@@ -18,4 +18,12 @@ export default class Image extends Resource {
     public getImageElement(): HTMLImageElement {
         return this.image;
     }
+
+    public getWidth(): number {
+        return this.image.naturalWidth;
+    }
+
+    public getHeight(): number {
+        return this.image.naturalHeight;
+    }
 }

@@ -65,8 +65,8 @@ export default class Game {
         scene.setParent(null);
         this.sceneStack.push(scene);
 
-        if (scene.onPush) {
-            scene.onPush();
+        if (scene.onShow) {
+            scene.onShow();
         }
 
         this.redraw();
@@ -76,8 +76,8 @@ export default class Game {
 
     public popScene(): void {
         const currentScene = this.getCurrentScene();
-        if (currentScene && currentScene.onPop) {
-            currentScene.onPop();
+        if (currentScene && currentScene.onHide) {
+            currentScene.onHide();
         }
 
         this.sceneStack.pop();
