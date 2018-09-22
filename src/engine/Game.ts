@@ -103,7 +103,7 @@ export default class Game {
             const currentScene = this.getCurrentScene();
             if (currentScene) {
                 currentScene.update(dt);
-                currentScene.draw(this.context2d, this.scale);
+                currentScene.draw(this, this.context2d, this.scale);
             }
             this.context2d.restore();
         }
@@ -124,7 +124,7 @@ export default class Game {
             this.scale = Math.min(scaleX, scaleY);
 
             if (this.scale >= 1) {
-                this.scale = Math.floor(this.scale);
+                this.scale = Math.trunc(this.scale);
 
                 if (this.context2d) {
                     this.context2d.canvas.width = this.designedWidth * this.scale;
@@ -181,8 +181,8 @@ export default class Game {
             y -= this.canvas.offsetTop;
         }
 
-        x = Math.floor(x / this.scale);
-        y = Math.floor(y / this.scale);
+        x = Math.trunc(x / this.scale);
+        y = Math.trunc(y / this.scale);
 
         const currentScene = this.getCurrentScene();
         if (currentScene) {

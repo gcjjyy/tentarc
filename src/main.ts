@@ -4,7 +4,6 @@ import router from './router';
 
 import Game from '@/engine/Game';
 import LogoScene from './LogoScene';
-import GameScene from './GameScene';
 
 Vue.config.productionTip = false;
 
@@ -29,7 +28,7 @@ class Hello extends Game {
     }
 }
 
-const hello: Hello = new Hello('canvas1', 256, 192);
+const hello: Hello = new Hello('canvas1', 480, 270);
 hello.run();
 
 const hello2: Hello = new Hello('canvas2', 128, 128);

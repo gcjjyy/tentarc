@@ -1,7 +1,7 @@
 import Game from './Game';
 import TileMap from './TileMap';
 import LocalFileLoader from './LocalFileLoader';
-import Image from './Image';
+import TileSet from './TileSet';
 
 /**
  * Tiled 1.1.0 JSON Map Format
@@ -181,8 +181,8 @@ export default class TiledJsonLoader {
 
                 const map = new TileMap(mapdata.width, mapdata.height, mapdata.tilewidth, mapdata.tileheight);
                 for (const tileset of mapdata.tilesets) {
-                    map.addTileSet(new Image(game, tileset.image));
-                    console.log('Tileset Added: ', tileset.image);
+                    map.addTileSet(new TileSet(game, tileset.image, tileset.columns, tileset.tilecount));
+                    console.log('Tileset Added: ', tileset.image, '(', tileset.columns, tileset.tilecount, ')');
                 }
 
                 for (const layer of mapdata.layers) {

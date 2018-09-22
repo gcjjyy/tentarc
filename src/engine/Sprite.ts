@@ -1,3 +1,4 @@
+import Game from './Game';
 import GameObject from './GameObject';
 import Image from './Image';
 
@@ -14,7 +15,7 @@ export default class Sprite extends GameObject {
         this.image = image;
     }
 
-    public onDraw = (context2d: CanvasRenderingContext2D, scale: number): void => {
+    public onDraw = (game: Game, context2d: CanvasRenderingContext2D, scale: number): void => {
         context2d.drawImage(
             this.image.getImageElement(),
             this.sx, this.sy,
