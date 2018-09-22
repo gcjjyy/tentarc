@@ -2,12 +2,15 @@ import Game from '@/engine/Game';
 import Scene from '@/engine/Scene';
 import Image from '@/engine/Image';
 import Sound from '@/engine/Sound';
+import DosFont from '@/engine/DosFont';
 import Sprite from '@/engine/Sprite';
+import Text from '@/engine/Text';
 import GameScene from '@/GameScene';
 
 export default class LogoScene extends Scene {
     private img: Image;
     private bgm: Sound;
+    private fnt: DosFont;
 
     constructor(game: Game) {
         super(game);
@@ -17,6 +20,8 @@ export default class LogoScene extends Scene {
 
         // Load Music
         this.bgm = new Sound(game, 'Beethoven_12_Variation.mp3');
+
+        this.fnt = new DosFont(game, 'HMDEF.ENG', 'H04.HAN');
     }
 
     public onShow = (): void => {
@@ -34,6 +39,8 @@ export default class LogoScene extends Scene {
                 }
             }
         }
+
+        this.addGameObject(new Text(this.fnt, 'Hello~! 반가워!'));
     }
 
     public onHide = (): void => {
