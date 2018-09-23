@@ -1,36 +1,50 @@
 import Game from './Game';
 import GameObject from './GameObject';
 import Image from './Image';
+import FrameAnimation from './FrameAnimation';
 
 export default class Sprite extends GameObject {
     private image: Image;
-    private sx: number;
-    private sy: number;
+    private animations: FrameAnimation[] = [];
+    private curAnimation: number = 0;
 
-    constructor(image: Image, sx: number, sy: number, width: number, height: number) {
-        super(width, height);
-
-        this.sx = sx;
-        this.sy = sy;
+    constructor(image: Image) {
+        super(0, 0);
         this.image = image;
     }
 
+    public onUpdate = (dt: number): void => {
+        this.animations[this.curAnimation].onUpdate(dt);
+    }
+
     public onDraw = (game: Game, context2d: CanvasRenderingContext2D, scale: number): void => {
+        const currentFrame = this.animations[this.curAnimation].getCurrentFrame();
+        this.setWidth(currentFrame.getWidth());
+        this.setHeight(currentFrame.getHeight());
+
         context2d.drawImage(
             this.image.getImageElement(),
-            this.sx, this.sy,
-            this.getWidth(), this.getHeight(),
+            currentFrame.getX(), currentFrame.getY(),
+            currentFrame.getWidth(), currentFrame.getHeight(),
             this.getAbsoluteX() * scale,
             this.getAbsoluteY() * scale,
-            this.getWidth() * scale,
-            this.getHeight() * scale);
+            currentFrame.getWidth() * scale,
+            currentFrame.getHeight() * scale);
     }
 
-    public setSourceX(sx: number): void {
-        this.sx = sx;
+    public addAnimation(anim: FrameAnimation): void {
+        this.animations.push(anim);
     }
 
-    public setSourceY(sy: number): void {
-        this.sy = sy;
+    public setAnimation(anim: number | string): void {
+        if (typeof anim === 'number') {
+            this.curAnimation = anim;
+        } else if (typeof anim === 'string') {
+            this.curAnimation = 0;
+        }
+    }
+
+    public getCurrentAnimation(): number {
+        return this.curAnimation;
     }
 }

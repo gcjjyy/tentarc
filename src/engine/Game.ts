@@ -90,14 +90,13 @@ export default class Game {
     }
 
     public gameLoop(): void {
-        const dt: number = Date.now() - this.lastTime;
+        const dt: number = (Date.now() - this.lastTime) / 1000;
         this.lastTime = Date.now();
 
         requestAnimationFrame(() => { this.gameLoop(); });
 
         if (this.context2d) {
-            this.context2d.fillStyle = 'black';
-            this.context2d.fill();
+            this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
             this.context2d.save();
 
             const currentScene = this.getCurrentScene();

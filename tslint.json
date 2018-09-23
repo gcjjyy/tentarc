@@ -17,6 +17,7 @@
     "no-consecutive-blank-lines": false,
 
     "no-eval": false,
-    "no-console": false
+    "no-console": false,
+    "no-bitwise": false
   }
 }
