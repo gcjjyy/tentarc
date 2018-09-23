@@ -19,15 +19,9 @@ export default class LogoScene extends Scene {
     constructor(game: Game) {
         super(game);
 
-        // Load Image
         this.img = new Image(game, 'tileset.png');
-
-        // Load Character
         this.chr = new Image(game, 'character.png');
-
-        // Load Music
         this.bgm = new Sound(game, 'Beethoven_12_Variation.mp3');
-
         this.fnt = new DosFont(game, 'HMDEF.ENG', 'H04.HAN');
     }
 

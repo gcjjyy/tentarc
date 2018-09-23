@@ -23,7 +23,7 @@ export default class FrameAnimation {
 
     public onUpdate(dt: number): void {
         this.remainTime -= dt;
-        if (this.remainTime <= 0) {
+        while (this.remainTime <= 0) {
             this.remainTime += (this.duration / this.frames.length);
             this.currentFrame++;
             if (this.currentFrame >= this.frames.length) {
