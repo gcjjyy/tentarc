@@ -1,6 +1,6 @@
 import Frame from './Frame';
 
-export default class FrameAnimation {
+export default class Animation {
     private id: string;
     private duration: number;
     private frames: Frame[] = [];

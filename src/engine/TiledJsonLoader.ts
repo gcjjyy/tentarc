@@ -173,16 +173,13 @@ interface TiledJson {
 export default class TiledJsonLoader {
     public static load(game: Game, filename: string, onload: (map: TileMap | null) => any): void {
         const loader = new LocalFileLoader();
-        loader.loadAsText('./tilemap.json', (data: string | null): any => {
+        loader.loadAsText(filename, (data: string | null): any => {
             if (data) {
                 const mapdata: TiledJson = JSON.parse(data);
-                console.log('MapSize:', mapdata.width, mapdata.height);
-                console.log('TileSize:', mapdata.tilewidth, mapdata.tileheight);
 
                 const map = new TileMap(mapdata.width, mapdata.height, mapdata.tilewidth, mapdata.tileheight);
                 for (const tileset of mapdata.tilesets) {
                     map.addTileSet(new TileSet(game, tileset.image, tileset.columns, tileset.tilecount));
-                    console.log('Tileset Added: ', tileset.image, '(', tileset.columns, tileset.tilecount, ')');
                 }
 
                 for (const layer of mapdata.layers) {
@@ -197,7 +194,6 @@ export default class TiledJsonLoader {
 
                     map.addLayer(layerData);
                 }
-
                 onload(map);
             } else {
                 onload(null);

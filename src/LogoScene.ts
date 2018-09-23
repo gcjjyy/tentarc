@@ -6,7 +6,8 @@ import DosFont from '@/engine/DosFont';
 import Sprite from '@/engine/Sprite';
 import Text from '@/engine/Text';
 import GameScene from '@/GameScene';
-import FrameAnimation from '@/engine/FrameAnimation';
+import SpriteJsonLoader from '@/engine/SpriteJsonLoader';
+import Animation from '@/engine/Animation';
 import Frame from '@/engine/Frame';
 
 export default class LogoScene extends Scene {
@@ -27,7 +28,7 @@ export default class LogoScene extends Scene {
 
     public onShow = (): void => {
         console.log('LogoScene Show');
-
+/*
         this.sprite = new Sprite(this.chr);
 
         const anim1 = new FrameAnimation('walk-down', 1);
@@ -60,8 +61,14 @@ export default class LogoScene extends Scene {
             this.sprite.addAnimation(anim3);
             this.sprite.addAnimation(anim4);
         }
+*/
 
-        this.addGameObject(this.sprite).setPosition(64, 64);
+        SpriteJsonLoader.load(this.game, 'hero.json', (sprite: Sprite | null): void => {
+            this.sprite = sprite;
+            if (sprite) {
+                this.addGameObject(sprite).setPosition(64, 64);
+            }
+        });
 
         this.addGameObject(new Text(this.fnt, 'ABCD1234ab\ncd!!')).setPosition(0, 16);
         this.addGameObject(new Text(this.fnt, 'Hello~! 반가워!', 48, 16)).setPosition(0, 48);

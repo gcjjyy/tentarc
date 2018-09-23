@@ -1,11 +1,11 @@
 import Game from './Game';
 import GameObject from './GameObject';
 import Image from './Image';
-import FrameAnimation from './FrameAnimation';
+import Animation from './Animation';
 
 export default class Sprite extends GameObject {
     private image: Image;
-    private animations: FrameAnimation[] = [];
+    private animations: Animation[] = [];
     private curAnimation: number = 0;
 
     constructor(image: Image) {
@@ -32,7 +32,7 @@ export default class Sprite extends GameObject {
             currentFrame.getHeight() * scale);
     }
 
-    public addAnimation(anim: FrameAnimation): void {
+    public addAnimation(anim: Animation): void {
         this.animations.push(anim);
     }
 
