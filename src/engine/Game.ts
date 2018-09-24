@@ -16,6 +16,7 @@ export default class Game {
     public onResize: ((width: number, height: number) => void) | null = null;
 
     private lastTime: number;
+    private objectList: GameObject[] = [];
 
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
         this.canvasId = canvasId;
@@ -102,7 +103,33 @@ export default class Game {
             const currentScene = this.getCurrentScene();
             if (currentScene) {
                 currentScene.update(dt);
-                currentScene.draw(this, this.context2d, this.scale);
+
+                /**
+                 * this.objectList: The list contains objects to draw to screen.
+                 */
+                this.objectList = [];
+                currentScene.traverse(this.objectList);
+
+                // Sort the list by sortIndex
+                this.objectList.sort((a: GameObject, b: GameObject): number => {
+                    if (a.getSortIndex() < b.getSortIndex()) {
+                        return -1;
+                    } else if (a.getSortIndex() === b.getSortIndex()) {
+                        if (a.getAbsoluteY() <= b.getAbsoluteY()) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return 1;
+                    }
+                });
+
+                for (const object of this.objectList) {
+                    if (object.onDraw) {
+                        object.onDraw(this, this.context2d, this.scale);
+                    }
+                }
             }
             this.context2d.restore();
         }
@@ -129,18 +156,12 @@ export default class Game {
                     this.context2d.canvas.width = this.designedWidth * this.scale;
                     this.context2d.canvas.height = this.designedHeight * this.scale;
                     this.context2d.imageSmoothingEnabled = false;
-
-                    // For IE11
-                    eval('this.context2d.msImageSmoothingEnabled = false;');
                 }
             } else {
                 if (this.context2d) {
                     this.context2d.canvas.width = this.designedWidth * this.scale;
                     this.context2d.canvas.height = this.designedHeight * this.scale;
                     this.context2d.imageSmoothingEnabled = true;
-
-                    // For IE11
-                    eval('this.context2d.msImageSmoothingEnabled = true;');
                 }
             }
         }

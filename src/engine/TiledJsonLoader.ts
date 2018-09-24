@@ -2,6 +2,7 @@ import Game from './Game';
 import TileMap from './TileMap';
 import LocalFileLoader from './LocalFileLoader';
 import TileSet from './TileSet';
+import TileMapLayer from './TileMapLayer';
 
 /**
  * Tiled 1.1.0 JSON Map Format
@@ -192,7 +193,12 @@ export default class TiledJsonLoader {
                         }
                     }
 
-                    map.addLayer(layerData);
+                    map.addLayer(new TileMapLayer(
+                        mapdata.width,
+                        mapdata.height,
+                        mapdata.tilewidth,
+                        mapdata.tileheight,
+                        layerData), layer.id);
                 }
                 onload(map);
             } else {

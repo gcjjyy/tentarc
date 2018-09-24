@@ -11,6 +11,7 @@ export default class GameObject {
     private y: number = 0;
     private width: number = 0;
     private height: number = 0;
+    private sortIndex: number = 1;
     private parent: GameObject | null = null;
     private childs: GameObject[] = [];
 
@@ -26,10 +27,26 @@ export default class GameObject {
         return this;
     }
 
-    public setX(x: number): void { this.x = x; }
-    public setY(y: number): void { this.y = y; }
-    public setWidth(width: number): void { this.width = width; }
-    public setHeight(height: number): void { this.height = height; }
+    public setX(x: number): GameObject {
+        this.x = x;
+        return this;
+    }
+
+    public setY(y: number): GameObject {
+        this.y = y;
+        return this;
+    }
+
+    public setWidth(width: number): GameObject {
+        this.width = width;
+        return this;
+    }
+
+    public setHeight(height: number): GameObject {
+        this.height = height;
+        return this;
+    }
+
 
     public getX(): number { return this.x; }
     public getY(): number { return this.y; }
@@ -52,14 +69,35 @@ export default class GameObject {
         }
     }
 
-    public setParent(object: GameObject | null): void {
+    public setSortIndex(sortIndex: number): GameObject {
+        this.sortIndex = sortIndex;
+        return this;
+    }
+
+    public getSortIndex(): number {
+        return this.sortIndex;
+    }
+
+    public setParent(object: GameObject | null): GameObject {
         this.parent = object;
+        return this;
+    }
+
+    public getParent(): GameObject | null {
+        return this.parent;
     }
 
     public addChild(object: GameObject): GameObject {
         object.setParent(this);
         this.childs.push(object);
         return object;
+    }
+
+    public traverse(list: GameObject[]): void {
+        list.push(this);
+        for (const child of this.childs) {
+            child.traverse(list);
+        }
     }
 
     public update(dt: number): void {
@@ -69,16 +107,6 @@ export default class GameObject {
 
         for (const child of this.childs) {
             child.update(dt);
-        }
-    }
-
-    public draw(game: Game, context2d: CanvasRenderingContext2D, scale: number): void {
-        if (this.onDraw) {
-            this.onDraw(game, context2d, scale);
-        }
-
-        for (const child of this.childs) {
-            child.draw(game, context2d, scale);
         }
     }
 

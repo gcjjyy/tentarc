@@ -18,13 +18,15 @@ export default class GameScene extends Scene {
                 this.addGameObject(map);
                 this.map = map;
             }
+        });
 
-            SpriteJsonLoader.load(this.game, 'hero.json', (sprite: Sprite | null): void => {
-                this.sprite = sprite;
-                if (sprite) {
-                    this.addGameObject(sprite).setPosition(game.designedWidth / 2, game.designedHeight / 2);
-                }
-            });
+        SpriteJsonLoader.load(this.game, 'hero.json', (sprite: Sprite | null): void => {
+            this.sprite = sprite;
+            if (sprite) {
+                this.addGameObject(sprite)
+                    .setPosition(game.designedWidth / 2, game.designedHeight / 2)
+                    .setSortIndex(1.5);
+            }
         });
     }
 
