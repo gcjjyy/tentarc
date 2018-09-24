@@ -1,24 +1,36 @@
-import Game from './Game';
 import Resource from './Resource';
+import LocalFileLoader from './LocalFileLoader';
 
 export default class Sound extends Resource {
-    protected audio: HTMLAudioElement;
+    private context: AudioContext | null = null;
 
-    constructor(game: Game, filename: string) {
+    constructor() {
         super();
 
-        this.audio = document.createElement('audio');
-        this.audio.src = filename;
-        this.audio.autoplay = false;
-        this.audio.setAttribute('preload', 'auto');
-        this.audio.setAttribute('controls', 'none');
-
-        if (game.resources) {
-            game.resources.appendChild(this.audio);
+        try {
+            this.context = new AudioContext();
+        } catch (e) {
+            this.context = null;
         }
     }
 
-    public play(): void {
-        this.audio.play();
+    public play(filename: string): void {
+        if (this.context) {
+            const loader = new LocalFileLoader();
+            loader.loadAsBinary(filename, (buffer: ArrayBuffer | null): any => {
+                if (this.context && buffer) {
+                    this.context.decodeAudioData(buffer, this.decodeCallback);
+                }
+            });
+        }
+    }
+
+    private decodeCallback = (buffer: AudioBuffer): void => {
+        if (this.context) {
+            const source = this.context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.context.destination);
+            source.start();
+        }
     }
 }

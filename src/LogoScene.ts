@@ -21,13 +21,12 @@ export default class LogoScene extends Scene {
 
         this.img = new Image(game, 'tileset.png');
         this.chr = new Image(game, 'character.png');
-        this.bgm = new Sound(game, 'Beethoven_12_Variation.mp3');
+        this.bgm = new Sound();
+        this.bgm.play('./Beethoven_12_Variation.mp3');
         this.fnt = new DosFont(game, 'HMDEF.ENG', 'H04.HAN');
     }
 
     public onShow = (): void => {
-        console.log('LogoScene Show');
-
         this.sprite = new Sprite(this.chr);
 
         const anim1 = new Animation('walk-down', 1);
@@ -68,7 +67,7 @@ export default class LogoScene extends Scene {
     }
 
     public onHide = (): void => {
-        console.log('LogoScene Hide');
+        return;
     }
 
     public onKeyDown = (key: string, keyCode: number): void => {
