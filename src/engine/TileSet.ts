@@ -5,8 +5,8 @@ export default class TileSet extends Image {
     private columns: number;
     private tileCount: number;
 
-    constructor(game: Game, filename: string, columns: number, tileCount: number) {
-        super(game, filename);
+    constructor(filename: string, columns: number, tileCount: number) {
+        super(filename);
 
         this.columns = columns;
         this.tileCount = tileCount;

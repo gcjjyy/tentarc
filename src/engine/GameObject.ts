@@ -2,7 +2,7 @@ import Game from './Game';
 
 export default class GameObject {
     public onUpdate: ((dt: number) => void) | null = null;
-    public onDraw: ((game: Game, context2d: CanvasRenderingContext2D, scale: number) => void) | null = null;
+    public onDraw: ((game: Game) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
     public onKeyUp: ((key: string, keyCode: number) => void) | null = null;

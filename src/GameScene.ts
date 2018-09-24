@@ -1,5 +1,6 @@
 import Game from '@/engine/Game';
 import Scene from '@/engine/Scene';
+import Sound from '@/engine/Sound';
 import Sprite from '@/engine/Sprite';
 import TileMap from '@/engine/TileMap';
 import TiledJsonLoader from '@/engine/TiledJsonLoader';
@@ -9,33 +10,37 @@ export default class GameScene extends Scene {
     private keyDown: boolean[] = [];
     private map: TileMap | null = null;
     private sprite: Sprite | null = null;
+    private bgm: Sound;
 
     constructor(game: Game) {
         super(game);
 
-        TiledJsonLoader.load(game, './tilemap.json', (map: TileMap | null): void => {
+        this.bgm = new Sound();
+        this.bgm.play('./Beethoven_12_Variation.mp3');
+
+        TiledJsonLoader.load('./tilemap.json', (map: TileMap | null): void => {
             if (map) {
                 this.addGameObject(map);
                 this.map = map;
             }
         });
 
-        SpriteJsonLoader.load(this.game, 'hero.json', (sprite: Sprite | null): void => {
+        SpriteJsonLoader.load('hero.json', (sprite: Sprite | null): void => {
             this.sprite = sprite;
             if (sprite) {
                 this.addGameObject(sprite)
-                    .setPosition(game.designedWidth / 2, game.designedHeight / 2)
+                    .setPosition(this.getWidth() / 2, this.getHeight() / 2)
                     .setSortIndex(1.5);
             }
         });
     }
 
     public onShow = (): void => {
-        console.log('GameScene Show');
+        return;
     }
 
     public onHide = (): void => {
-        console.log('GameScene Hide');
+        return;
     }
 
     public onUpdate = (dt: number): void => {
@@ -65,6 +70,6 @@ export default class GameScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.game.popScene();
+        this.getCurrentGame().popScene();
     }
 }

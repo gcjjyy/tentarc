@@ -20,47 +20,53 @@ export default class TileMapLayer extends GameObject {
         this.mapData = mapData;
     }
 
-    public onDraw = (game: Game, context2d: CanvasRenderingContext2D, scale: number): void => {
-        const absX: number = this.getAbsoluteX();
-        const absY: number = this.getAbsoluteY();
+    public onDraw = (game: Game): void => {
 
-        // Get starting offset position
-        const startX: number = Math.max(Math.trunc((absX * (-1)) / this.tileWidth), 0);
-        const startY: number = Math.max(Math.trunc((absY * (-1)) / this.tileHeight), 0);
-        const endX: number = Math.min(
-            startX + Math.ceil(game.designedWidth / this.tileWidth) + 1,
-            this.mapWidth);
-        const endY: number = Math.min(
-            startY + Math.ceil(game.designedHeight / this.tileHeight) + 1,
-            this.mapHeight);
+        const context2d = game.getContext2d();
+        const scale = game.getScale();
 
-        if (this.getParent() instanceof TileMap) {
+        if (context2d) {
+            const absX: number = this.getAbsoluteX();
+            const absY: number = this.getAbsoluteY();
 
-            const tileSets = (this.getParent() as TileMap).getTileSets();
+            // Get starting offset position
+            const startX: number = Math.max(Math.trunc((absX * (-1)) / this.tileWidth), 0);
+            const startY: number = Math.max(Math.trunc((absY * (-1)) / this.tileHeight), 0);
+            const endX: number = Math.min(
+                startX + Math.ceil(game.designedWidth / this.tileWidth) + 1,
+                this.mapWidth);
+            const endY: number = Math.min(
+                startY + Math.ceil(game.designedHeight / this.tileHeight) + 1,
+                this.mapHeight);
 
-            for (let i = startY; i < endY; i++) {
-                for (let j = startX; j < endX; j++) {
-                    let tileNum: number = this.mapData[i][j];
-                    if (tileNum > 0) {
-                        tileNum -= 1;
+            if (this.getParent() instanceof TileMap) {
 
-                        let tileSetIndex = 0;
-                        for (const tileSet of tileSets) {
-                            if (tileNum >= tileSet.getTileCount()) {
-                                tileSetIndex++;
-                                tileNum -= tileSet.getTileCount();
+                const tileSets = (this.getParent() as TileMap).getTileSets();
+
+                for (let i = startY; i < endY; i++) {
+                    for (let j = startX; j < endX; j++) {
+                        let tileNum: number = this.mapData[i][j];
+                        if (tileNum > 0) {
+                            tileNum -= 1;
+
+                            let tileSetIndex = 0;
+                            for (const tileSet of tileSets) {
+                                if (tileNum >= tileSet.getTileCount()) {
+                                    tileSetIndex++;
+                                    tileNum -= tileSet.getTileCount();
+                                }
                             }
-                        }
 
-                        context2d.drawImage(
-                            tileSets[tileSetIndex].getImageElement(),
-                            Math.trunc(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
-                            Math.trunc(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,
-                            this.tileWidth, this.tileHeight,
-                            (absX + (j * this.tileWidth)) * scale,
-                            (absY + (i * this.tileHeight)) * scale,
-                            this.tileWidth * scale,
-                            this.tileHeight * scale);
+                            context2d.drawImage(
+                                tileSets[tileSetIndex].getImageElement(),
+                                Math.trunc(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
+                                Math.trunc(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,
+                                this.tileWidth, this.tileHeight,
+                                (absX + (j * this.tileWidth)) * scale,
+                                (absY + (i * this.tileHeight)) * scale,
+                                this.tileWidth * scale,
+                                this.tileHeight * scale);
+                        }
                     }
                 }
             }

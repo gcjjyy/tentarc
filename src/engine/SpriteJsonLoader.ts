@@ -1,4 +1,3 @@
-import Game from './Game';
 import Image from './Image';
 import Sprite from './Sprite';
 import Frame from './Frame';
@@ -24,12 +23,12 @@ interface SpriteJson {
 }
 
 export default class SpriteJsonLoader {
-    public static load(game: Game, filename: string, onload: (sprite: Sprite | null) => any): void {
+    public static load(filename: string, onload: (sprite: Sprite | null) => any): void {
         const loader = new LocalFileLoader();
         loader.loadAsText(filename, (data: string | null): any => {
             if (data) {
                 const spritedata: SpriteJson = JSON.parse(data);
-                const image = new Image(game, spritedata.image);
+                const image = new Image(spritedata.image);
                 const sprite = new Sprite(image);
 
                 for (const animation of spritedata.animations) {

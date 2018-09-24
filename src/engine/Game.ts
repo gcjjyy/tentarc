@@ -4,7 +4,6 @@ import Scene from './Scene';
 export default class Game {
     public canvas: HTMLCanvasElement | null = null;
     public canvasId: string = '';
-    public resources: HTMLDivElement | null = null;
     public designedWidth: number = 0;
     public designedHeight: number = 0;
     public context2d: CanvasRenderingContext2D | null = null;
@@ -27,9 +26,6 @@ export default class Game {
             this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
 
             if (this.canvas) {
-                this.resources = document.createElement('div') as HTMLDivElement;
-                this.resources.style.display = 'none';
-                this.canvas.appendChild(this.resources);
                 this.context2d = this.canvas.getContext('2d');
 
                 this.canvas.addEventListener('mousedown', (event: MouseEvent) => {
@@ -90,6 +86,22 @@ export default class Game {
         this.redraw();
     }
 
+    public getContext2d(): CanvasRenderingContext2D | null {
+        return this.context2d;
+    }
+
+    public getDesignedWidth(): number {
+        return this.designedWidth;
+    }
+
+    public getDesignedHeight(): number {
+        return this.designedHeight;
+    }
+
+    public getScale(): number {
+        return this.scale;
+    }
+
     public gameLoop(): void {
         const dt: number = (Date.now() - this.lastTime) / 1000;
         this.lastTime = Date.now();
@@ -127,7 +139,7 @@ export default class Game {
 
                 for (const object of this.objectList) {
                     if (object.onDraw) {
-                        object.onDraw(this, this.context2d, this.scale);
+                        object.onDraw(this);
                     }
                 }
             }

@@ -26,8 +26,8 @@ export default class DosFont extends Font {
     private engFontReady = false;
     private korFontReady = false;
 
-    constructor(game: Game, engFilename: string, korFilename: string) {
-        super(game);
+    constructor(engFilename: string, korFilename: string) {
+        super();
 
         this.loadEnglishFont(engFilename);
         this.loadKoreanFont(korFilename);
@@ -82,43 +82,46 @@ export default class DosFont extends Font {
      */
     public drawGlyph = (
         game: Game,
-        context2d: CanvasRenderingContext2D,
-        scale: number,
         x: number,
         y: number,
         ch: string): void => {
 
-        let code = ch.charCodeAt(0);
+        const context2d = game.getContext2d();
+        const scale = game.getScale();
 
-        if (this.engFontReady && code < 256) {
-            this.drawEngGlyph(game, context2d, scale, x, y, code);
-        } else if (this.korFontReady) {
-            code -= 0xac00;
+        if (context2d) {
+            let code = ch.charCodeAt(0);
 
-            const cho = Math.trunc(Math.trunc(code / 28) / 21) + 1;
-            const joong = (Math.trunc(code / 28) % 21) + 1;
-            const jong = code % 28;
+            if (this.engFontReady && code < 256) {
+                this.drawEngGlyph(context2d, scale, x, y, code);
+            } else if (this.korFontReady) {
+                code -= 0xac00;
 
-            const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
-            const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
-            const jongType = DosFont.jongType[joong];
+                const cho = Math.trunc(Math.trunc(code / 28) / 21) + 1;
+                const joong = (Math.trunc(code / 28) % 21) + 1;
+                const jong = code % 28;
 
-            this.drawKorGlyph(game, context2d, scale, x, y, choType * 20 + cho);
-            this.drawKorGlyph(game, context2d, scale, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+                const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
+                const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
+                const jongType = DosFont.jongType[joong];
 
-            if (jong) {
-                this.drawKorGlyph(game, context2d, scale, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                this.drawKorGlyph(context2d, scale, x, y, choType * 20 + cho);
+                this.drawKorGlyph(context2d, scale, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+
+                if (jong) {
+                    this.drawKorGlyph(context2d, scale, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                }
             }
         }
     }
 
     private drawEngGlyph(
-        game: Game,
         context2d: CanvasRenderingContext2D,
         scale: number,
         x: number,
         y: number,
         code: number): void {
+
         context2d.fillStyle = 'white';
 
         for (let i = 0; i < 16; i++) {
@@ -131,12 +134,12 @@ export default class DosFont extends Font {
     }
 
     private drawKorGlyph(
-        game: Game,
         context2d: CanvasRenderingContext2D,
         scale: number,
         x: number,
         y: number,
         code: number): void {
+
         context2d.fillStyle = 'white';
 
         for (let i = 0; i < 16; i++) {

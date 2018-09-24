@@ -1,4 +1,3 @@
-import Game from './Game';
 import TileMap from './TileMap';
 import LocalFileLoader from './LocalFileLoader';
 import TileSet from './TileSet';
@@ -172,7 +171,7 @@ interface TiledJson {
 }
 
 export default class TiledJsonLoader {
-    public static load(game: Game, filename: string, onload: (map: TileMap | null) => any): void {
+    public static load(filename: string, onload: (map: TileMap | null) => any): void {
         const loader = new LocalFileLoader();
         loader.loadAsText(filename, (data: string | null): any => {
             if (data) {
@@ -180,7 +179,7 @@ export default class TiledJsonLoader {
 
                 const map = new TileMap(mapdata.width, mapdata.height, mapdata.tilewidth, mapdata.tileheight);
                 for (const tileset of mapdata.tilesets) {
-                    map.addTileSet(new TileSet(game, tileset.image, tileset.columns, tileset.tilecount));
+                    map.addTileSet(new TileSet(tileset.image, tileset.columns, tileset.tilecount));
                 }
 
                 for (const layer of mapdata.layers) {

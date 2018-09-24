@@ -13,21 +13,28 @@ export default class Text extends GameObject {
         this.text = text;
     }
 
-    public onDraw = (game: Game, context2d: CanvasRenderingContext2D, scale: number): void => {
-        let x: number = this.getAbsoluteX();
-        let y: number = this.getAbsoluteY();
+    public onDraw = (game: Game): void => {
 
-        for (const ch of this.text) {
-            if (ch === '\n') {
-                x = this.getAbsoluteX();
-                y += this.font.getHeight();
-            } else {
-                this.font.drawGlyph(game, context2d, scale, x * scale, y * scale, ch);
-                if (this.getWidth() === 0 || (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
-                    x += this.font.getWidth(ch);
-                } else {
+        const context2d = game.getContext2d();
+        const scale = game.getScale();
+
+        if (context2d) {
+            let x: number = this.getAbsoluteX();
+            let y: number = this.getAbsoluteY();
+
+            for (const ch of this.text) {
+                if (ch === '\n') {
                     x = this.getAbsoluteX();
                     y += this.font.getHeight();
+                } else {
+                    this.font.drawGlyph(game, x * scale, y * scale, ch);
+                    if (this.getWidth() === 0 ||
+                        (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
+                        x += this.font.getWidth(ch);
+                    } else {
+                        x = this.getAbsoluteX();
+                        y += this.font.getHeight();
+                    }
                 }
             }
         }

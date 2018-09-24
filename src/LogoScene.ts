@@ -1,7 +1,6 @@
 import Game from '@/engine/Game';
 import Scene from '@/engine/Scene';
 import Image from '@/engine/Image';
-import Sound from '@/engine/Sound';
 import DosFont from '@/engine/DosFont';
 import Sprite from '@/engine/Sprite';
 import Text from '@/engine/Text';
@@ -12,18 +11,15 @@ import Frame from '@/engine/Frame';
 export default class LogoScene extends Scene {
     private img: Image;
     private chr: Image;
-    private bgm: Sound;
     private fnt: DosFont;
     private sprite: Sprite | null = null;
 
     constructor(game: Game) {
         super(game);
 
-        this.img = new Image(game, 'tileset.png');
-        this.chr = new Image(game, 'character.png');
-        this.bgm = new Sound();
-        this.bgm.play('./Beethoven_12_Variation.mp3');
-        this.fnt = new DosFont(game, 'HMDEF.ENG', 'H04.HAN');
+        this.img = new Image('tileset.png');
+        this.chr = new Image('character.png');
+        this.fnt = new DosFont('HMDEF.ENG', 'H04.HAN');
     }
 
     public onShow = (): void => {
@@ -81,6 +77,6 @@ export default class LogoScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.game.pushScene(new GameScene(this.game));
+        this.getCurrentGame().pushScene(new GameScene(this.getCurrentGame()));
     }
 }

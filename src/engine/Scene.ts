@@ -12,7 +12,7 @@ export default class Scene extends GameObject {
     public onShow: (() => void) | null = null;
     public onHide: (() => void) | null = null;
 
-    protected game: Game;
+    private game: Game;
 
     constructor(game: Game) {
         super(game.designedWidth, game.designedHeight);
@@ -22,5 +22,9 @@ export default class Scene extends GameObject {
     public addGameObject(object: GameObject): GameObject {
         this.addChild(object);
         return object;
+    }
+
+    public getCurrentGame(): Game {
+        return this.game;
     }
 }

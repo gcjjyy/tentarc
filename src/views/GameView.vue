@@ -30,12 +30,10 @@ export default class GameView extends Vue {
     this.game2 = new Game('canvas2', 128, 128);
 
     this.game.onLoad = (): void => {
-        console.log('My OnLoad');
         this.game.pushScene(new LogoScene(this.game));
     };
 
     this.game2.onLoad = (): void => {
-        console.log('My OnLoad');
         this.game2.pushScene(new LogoScene(this.game2));
     };
 
