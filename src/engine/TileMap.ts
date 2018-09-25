@@ -10,7 +10,7 @@ export default class TileMap extends GameObject {
     private mapWidth: number;
     private mapHeight: number;
     private mapLayers: TileMapLayer[] = [];
-    private collisionData: number[] = [];
+    private collisionTypeData: number[] = [];
 
     constructor(mapWidth: number, mapHeight: number, tileWidth: number, tileHeight: number) {
         super(mapWidth * tileWidth, mapHeight * tileHeight);
@@ -45,8 +45,8 @@ export default class TileMap extends GameObject {
         return null;
     }
 
-    public setCollisionData(data: number[]): void {
-        this.collisionData = data;
+    public setCollisionTypeData(data: number[]): void {
+        this.collisionTypeData = data;
     }
 
     public getTilePositionTopLeft(x: number, y: number): any {
@@ -69,12 +69,12 @@ export default class TileMap extends GameObject {
         };
     }
 
-    public getCollisionData(x: number, y: number): number {
+    public getCollisionType(x: number, y: number): number {
         const row = Math.trunc(y / this.tileHeight);
         const col = Math.trunc(x / this.tileWidth);
 
         if (row >= 0 && col >= 0 && row < this.mapHeight && col < this.mapWidth) {
-            return this.collisionData[row * this.mapWidth + col];
+            return this.collisionTypeData[row * this.mapWidth + col];
         } else {
             return -1;
         }

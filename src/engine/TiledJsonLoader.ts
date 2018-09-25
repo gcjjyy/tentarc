@@ -184,7 +184,7 @@ export default class TiledJsonLoader {
 
                 for (const layer of mapdata.layers) {
                     if (layer.name === '_collision') {
-                        map.setCollisionData(layer.data as number[]);
+                        map.setCollisionTypeData(layer.data as number[]);
                     } else {
                         map.addLayer(new TileMapLayer(
                             layer.name,
