@@ -2,27 +2,49 @@ import Resource from './Resource';
 import LocalFileLoader from './LocalFileLoader';
 
 export default class Sound extends Resource {
-    private context: AudioContext | null = null;
+    private context: AudioContext;
     private source: AudioBufferSourceNode | null = null;
+    private gain: GainNode | null = null;
+    private buffer: AudioBuffer | null = null;
+    private loadComplete: boolean = false;
+    private volume: number = 1;
+    private onload: (() => void) | null = null;
 
     constructor() {
         super();
-
-        try {
-            this.context = new AudioContext();
-        } catch (e) {
-            this.context = null;
-        }
+        this.context = new AudioContext();
     }
 
-    public play(filename: string): void {
+    public load(filename: string, onload: (() => void) | null = null): void {
         if (this.context) {
+            this.onload = onload;
             const loader = new LocalFileLoader();
             loader.loadAsBinary(filename, (buffer: ArrayBuffer | null): any => {
                 if (this.context && buffer) {
                     this.context.decodeAudioData(buffer, this.decodeCallback);
                 }
             });
+        }
+    }
+
+    public play(): void {
+        if (this.loadComplete) {
+            this.source = this.context.createBufferSource();
+            this.gain = this.context.createGain();
+            this.gain.gain.value = this.volume;
+
+            this.source.buffer = this.buffer;
+            this.source.connect(this.gain);
+            this.gain.connect(this.context.destination);
+            this.source.start();
+        }
+    }
+
+    public setVolume(volume: number): void {
+        this.volume = volume;
+
+        if (this.gain) {
+            this.gain.gain.value = volume;
         }
     }
 
@@ -33,11 +55,11 @@ export default class Sound extends Resource {
     }
 
     private decodeCallback = (buffer: AudioBuffer): void => {
-        if (this.context) {
-            this.source = this.context.createBufferSource();
-            this.source.buffer = buffer;
-            this.source.connect(this.context.destination);
-            this.source.start();
+        this.buffer = buffer;
+        this.loadComplete = true;
+
+        if (this.onload) {
+            this.onload();
         }
     }
 }

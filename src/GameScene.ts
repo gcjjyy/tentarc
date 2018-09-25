@@ -1,7 +1,10 @@
 import Game from '@/engine/Game';
 import Scene from '@/engine/Scene';
+import Image from '@/engine/Image';
 import Sound from '@/engine/Sound';
 import Sprite from '@/engine/Sprite';
+import Text from '@/engine/Text';
+import DosFont from '@/engine/DosFont';
 import TileMap from '@/engine/TileMap';
 import TiledJsonLoader from '@/engine/TiledJsonLoader';
 import SpriteJsonLoader from '@/engine/SpriteJsonLoader';
@@ -11,13 +14,24 @@ export default class GameScene extends Scene {
     private keyDown: boolean[] = [];
     private map: TileMap | null = null;
     private sprite: Sprite | null = null;
+    private talkimg: Image;
+    private talk: Sprite | null = null;
+    private fnt: DosFont;
     private bgm: Sound;
+    private step: Sound;
+    private stepCount: number = 1;
 
     constructor(game: Game) {
         super(game);
 
+        this.talkimg = new Image('font.png');
+        this.fnt = new DosFont('HMDEF.ENG', 'H04.HAN');
+
         this.bgm = new Sound();
-        // this.bgm.play('./Beethoven_12_Variation.mp3');
+        this.bgm.load('./hotel.mp3', () => { this.bgm.play(); this.bgm.setVolume(0.5); });
+
+        this.step = new Sound();
+        this.step.load('./ui-sound-14.ogg');
 
         TiledJsonLoader.load('./tilemap.json', (map: TileMap | null): void => {
             if (map) {
@@ -49,6 +63,14 @@ export default class GameScene extends Scene {
                     .setSortIndex(2);
             }
         });
+
+        this.talk = new Sprite(this.talkimg);
+        this.talk.setRect(0, 48, 240, 96);
+
+        this.addGameObject(this.talk).setPosition(120, 8).addChild(
+            new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;;')
+        );
+        this.talk.setVisible(false);
     }
 
     public onShow = (): void => {
@@ -67,15 +89,26 @@ export default class GameScene extends Scene {
             if (this.keyDown[37]) {
                 this.map.setX(this.map.getX() + 2);
                 this.sprite.setAnimation(3);
+                this.stepCount--;
             } else if (this.keyDown[38]) {
                 this.map.setY(this.map.getY() + 2);
                 this.sprite.setAnimation(2);
+                this.stepCount--;
             } else if (this.keyDown[39]) {
                 this.map.setX(this.map.getX() - 2);
                 this.sprite.setAnimation(1);
+                this.stepCount--;
             } else if (this.keyDown[40]) {
                 this.map.setY(this.map.getY() - 2);
                 this.sprite.setAnimation(0);
+                this.stepCount--;
+            } else {
+                this.stepCount = 1;
+            }
+
+            if (this.stepCount <= 0) {
+                this.step.play();
+                this.stepCount = 24;
             }
 
             if (this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 154) !== 0 ||
@@ -90,6 +123,12 @@ export default class GameScene extends Scene {
 
     public onKeyDown = (key: string, keyCode: number): void => {
         this.keyDown[keyCode] = true;
+
+        if (keyCode === 32) {
+            if (this.talk) {
+                this.talk.setVisible(!this.talk.getVisible());
+            }
+        }
     }
 
     public onKeyUp = (key: string, keyCode: number): void => {

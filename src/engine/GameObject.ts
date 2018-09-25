@@ -88,6 +88,10 @@ export default class GameObject {
         return this;
     }
 
+    public getVisible(): boolean {
+        return this.visible;
+    }
+
     public setParent(object: GameObject | null): GameObject {
         this.parent = object;
         return this;

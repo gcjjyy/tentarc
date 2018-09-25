@@ -18,7 +18,7 @@ import LogoScene from '@/LogoScene';
   components: {
   },
 })
-export default class GameView extends Vue {
+export default class EditorView extends Vue {
   private fullSize: boolean = false;
   private game: Game;
   private game2: Game;
