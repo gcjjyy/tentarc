@@ -78,10 +78,10 @@ export default class GameScene extends Scene {
                 this.sprite.setAnimation(0);
             }
 
-            if (this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 151) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 151) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 167) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 167) !== 0) {
+            if (this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 154) !== 0 ||
+                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 154) !== 0 ||
+                this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 163) !== 0 ||
+                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 163) !== 0) {
                 this.map.setX(oldX);
                 this.map.setY(oldY);
             }
