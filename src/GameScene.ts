@@ -23,6 +23,21 @@ export default class GameScene extends Scene {
             if (map) {
                 this.addGameObject(map);
                 this.map = map;
+
+                const ground = this.map.getLayer('ground');
+                if (ground) {
+                    ground.setSortIndex(0);
+                }
+
+                const objectUnderCharacter = this.map.getLayer('object_under_character');
+                if (objectUnderCharacter) {
+                    objectUnderCharacter.setSortIndex(1);
+                }
+
+                const objectOverCharacter = this.map.getLayer('object_over_character');
+                if (objectOverCharacter) {
+                    objectOverCharacter.setSortIndex(3);
+                }
             }
         });
 
@@ -31,7 +46,7 @@ export default class GameScene extends Scene {
             if (sprite) {
                 this.addGameObject(sprite)
                     .setPosition(this.getWidth() / 2, this.getHeight() / 2)
-                    .setSortIndex(1.5);
+                    .setSortIndex(2);
             }
         });
     }
