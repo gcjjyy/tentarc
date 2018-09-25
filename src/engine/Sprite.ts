@@ -17,25 +17,24 @@ export default class Sprite extends GameObject {
         this.animations[this.curAnimation].onUpdate(dt);
     }
 
-    public onDraw = (game: Game): void => {
+    public onDraw = (
+        context2d: CanvasRenderingContext2D,
+        designedWidth: number,
+        designedHeight: number,
+        scale: number): void => {
 
-        const context2d = game.getContext2d();
-        const scale = game.getScale();
+        const currentFrame = this.animations[this.curAnimation].getCurrentFrame();
+        this.setWidth(currentFrame.getWidth());
+        this.setHeight(currentFrame.getHeight());
 
-        if (context2d) {
-            const currentFrame = this.animations[this.curAnimation].getCurrentFrame();
-            this.setWidth(currentFrame.getWidth());
-            this.setHeight(currentFrame.getHeight());
-
-            context2d.drawImage(
-                this.image.getImageElement(),
-                currentFrame.getX(), currentFrame.getY(),
-                currentFrame.getWidth(), currentFrame.getHeight(),
-                this.getAbsoluteX() * scale,
-                this.getAbsoluteY() * scale,
-                currentFrame.getWidth() * scale,
-                currentFrame.getHeight() * scale);
-            }
+        context2d.drawImage(
+            this.image.getImageElement(),
+            currentFrame.getX(), currentFrame.getY(),
+            currentFrame.getWidth(), currentFrame.getHeight(),
+            this.getAbsoluteX() * scale,
+            this.getAbsoluteY() * scale,
+            currentFrame.getWidth() * scale,
+            currentFrame.getHeight() * scale);
     }
 
     public addAnimation(anim: Animation): void {

@@ -1,4 +1,3 @@
-import Game from '@/engine/Game';
 import GameObject from './GameObject';
 import TileSet from './TileSet';
 import TileMapLayer from './TileMapLayer';

@@ -139,7 +139,7 @@ export default class Game {
 
                 for (const object of this.objectList) {
                     if (object.onDraw) {
-                        object.onDraw(this);
+                        object.onDraw(this.context2d, this.designedWidth, this.designedHeight, this.scale);
                     }
                 }
             }

@@ -1,4 +1,3 @@
-import Game from './Game';
 import GameObject from './GameObject';
 import Font from './Font';
 
@@ -13,28 +12,27 @@ export default class Text extends GameObject {
         this.text = text;
     }
 
-    public onDraw = (game: Game): void => {
+    public onDraw = (
+        context2d: CanvasRenderingContext2D,
+        designedWidth: number,
+        designedHeight: number,
+        scale: number): void => {
 
-        const context2d = game.getContext2d();
-        const scale = game.getScale();
+        let x: number = this.getAbsoluteX();
+        let y: number = this.getAbsoluteY();
 
-        if (context2d) {
-            let x: number = this.getAbsoluteX();
-            let y: number = this.getAbsoluteY();
-
-            for (const ch of this.text) {
-                if (ch === '\n') {
+        for (const ch of this.text) {
+            if (ch === '\n') {
+                x = this.getAbsoluteX();
+                y += this.font.getHeight();
+            } else {
+                this.font.drawGlyph(context2d, scale, x * scale, y * scale, ch);
+                if (this.getWidth() === 0 ||
+                    (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
+                    x += this.font.getWidth(ch);
+                } else {
                     x = this.getAbsoluteX();
                     y += this.font.getHeight();
-                } else {
-                    this.font.drawGlyph(game, x * scale, y * scale, ch);
-                    if (this.getWidth() === 0 ||
-                        (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
-                        x += this.font.getWidth(ch);
-                    } else {
-                        x = this.getAbsoluteX();
-                        y += this.font.getHeight();
-                    }
                 }
             }
         }
