@@ -12,6 +12,7 @@ export default class GameObject {
     private width: number = 0;
     private height: number = 0;
     private sortIndex: number = 1;
+    private visible: boolean = true;
     private parent: GameObject | null = null;
     private childs: GameObject[] = [];
 
@@ -78,6 +79,11 @@ export default class GameObject {
         return this.sortIndex;
     }
 
+    public setVisible(visible: boolean): GameObject {
+        this.visible = visible;
+        return this;
+    }
+
     public setParent(object: GameObject | null): GameObject {
         this.parent = object;
         return this;
@@ -94,9 +100,11 @@ export default class GameObject {
     }
 
     public traverse(list: GameObject[]): void {
-        list.push(this);
-        for (const child of this.childs) {
-            child.traverse(list);
+        if (this.visible) {
+            list.push(this);
+            for (const child of this.childs) {
+                child.traverse(list);
+            }
         }
     }
 

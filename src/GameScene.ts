@@ -5,6 +5,7 @@ import Sprite from '@/engine/Sprite';
 import TileMap from '@/engine/TileMap';
 import TiledJsonLoader from '@/engine/TiledJsonLoader';
 import SpriteJsonLoader from '@/engine/SpriteJsonLoader';
+import TileMapLayer from '@/engine/TileMapLayer';
 
 export default class GameScene extends Scene {
     private keyDown: boolean[] = [];
@@ -16,7 +17,7 @@ export default class GameScene extends Scene {
         super(game);
 
         this.bgm = new Sound();
-        this.bgm.play('./Beethoven_12_Variation.mp3');
+        // this.bgm.play('./Beethoven_12_Variation.mp3');
 
         TiledJsonLoader.load('./tilemap.json', (map: TileMap | null): void => {
             if (map) {
@@ -45,6 +46,9 @@ export default class GameScene extends Scene {
 
     public onUpdate = (dt: number): void => {
         if (this.map && this.sprite) {
+            const oldX = this.map.getX();
+            const oldY = this.map.getY();
+
             if (this.keyDown[37]) {
                 this.map.setX(this.map.getX() + 2);
                 this.sprite.setAnimation(3);
@@ -57,6 +61,14 @@ export default class GameScene extends Scene {
             } else if (this.keyDown[40]) {
                 this.map.setY(this.map.getY() - 2);
                 this.sprite.setAnimation(0);
+            }
+
+            if (this.map.getCollisionData(this.map.getX() * -1 + 240, this.map.getY() * -1 + 151) !== 0 ||
+                this.map.getCollisionData(this.map.getX() * -1 + 256, this.map.getY() * -1 + 151) !== 0 ||
+                this.map.getCollisionData(this.map.getX() * -1 + 240, this.map.getY() * -1 + 167) !== 0 ||
+                this.map.getCollisionData(this.map.getX() * -1 + 256, this.map.getY() * -1 + 167) !== 0) {
+                this.map.setX(oldX);
+                this.map.setY(oldY);
             }
         }
     }

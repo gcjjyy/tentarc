@@ -183,21 +183,17 @@ export default class TiledJsonLoader {
                 }
 
                 for (const layer of mapdata.layers) {
-                    let layerData: number[][];
-                    layerData = [];
-                    for (let i = 0; i < layer.height; i++) {
-                        layerData[i] = [];
-                        for (let j = 0; j < layer.width; j++) {
-                            layerData[i][j] = layer.data[i * layer.width + j] as number;
-                        }
+                    if (layer.name === '_collision') {
+                        map.setCollisionData(layer.data as number[]);
+                    } else {
+                        map.addLayer(new TileMapLayer(
+                            layer.name,
+                            mapdata.width,
+                            mapdata.height,
+                            mapdata.tilewidth,
+                            mapdata.tileheight,
+                            layer.data as number[]), layer.id);
                     }
-
-                    map.addLayer(new TileMapLayer(
-                        mapdata.width,
-                        mapdata.height,
-                        mapdata.tilewidth,
-                        mapdata.tileheight,
-                        layerData), layer.id);
                 }
                 onload(map);
             } else {
