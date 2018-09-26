@@ -34,21 +34,26 @@ export default class TileMapLayer extends SceneObject {
 
     public onDraw = (screen: Screen): void => {
 
-        if (this.getParent() instanceof TileMap) {
+        const parent: TileMap = this.getParent() as TileMap;
 
+        if (parent) {
             const absX = this.getAbsoluteX();
             const absY = this.getAbsoluteY();
             const vpX = screen.getViewportX();
             const vpY = screen.getViewportY();
-            const width = Math.trunc(screen.getDesignedWidth() / this.tileWidth);
-            const height = Math.trunc(screen.getDesignedHeight() / this.tileHeight);
+            const width = (parent.getDrawWidth() !== 0) ?
+                parent.getDrawWidth() :
+                Math.trunc(screen.getDesignedWidth() / this.tileWidth);
+            const height = (parent.getDrawHeight() !== 0) ?
+                parent.getDrawHeight() :
+                Math.trunc(screen.getDesignedHeight() / this.tileHeight);
 
             const startX = Math.trunc((vpX - absX) / this.tileWidth);
             const startY = Math.trunc((vpY - absY) / this.tileHeight);
             const endX = startX + width + 2;
             const endY = startY + height + 2;
 
-            const tileSets = (this.getParent() as TileMap).getTileSets();
+            const tileSets = parent.getTileSets();
 
             for (let i = startY; i < endY; i++) {
                 for (let j = startX; j < endX; j++) {

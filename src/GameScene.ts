@@ -8,7 +8,7 @@ import DosFont from '@/engine/DosFont';
 import TileMap from '@/engine/TileMap';
 import TiledJsonLoader from '@/engine/TiledJsonLoader';
 import SpriteJsonLoader from '@/engine/SpriteJsonLoader';
-import TileMapLayer from '@/engine/TileMapLayer';
+import Plane from '@/engine/Plane';
 
 export default class GameScene extends Scene {
     private keyDown: boolean[] = [];
@@ -53,6 +53,9 @@ export default class GameScene extends Scene {
                 if (objectOverCharacter) {
                     objectOverCharacter.setSortIndex(3);
                 }
+
+                map.setDrawSize(16, 16);
+                this.addSceneObject(new Plane(480 - 16 * 16, 270, 'black')).setX(16 * 17).setSortIndex(10);
             }
         });
 
@@ -95,28 +98,22 @@ export default class GameScene extends Scene {
         if (this.map && this.sprite) {
             const oldX = this.sprite.getX();
             const oldY = this.sprite.getY();
-            const vpX = this.getCurrentScreen().getViewportX();
-            const vpY = this.getCurrentScreen().getViewportY();
 
             if (this.keyDown[37]) {
                 this.sprite.setX(oldX - 2);
                 this.sprite.setAnimation(3);
-                this.getCurrentScreen().setViewportX(vpX - 2);
                 this.stepCount--;
             } else if (this.keyDown[38]) {
                 this.sprite.setY(oldY - 2);
                 this.sprite.setAnimation(2);
-                this.getCurrentScreen().setViewportY(vpY - 2);
                 this.stepCount--;
             } else if (this.keyDown[39]) {
                 this.sprite.setX(oldX + 2);
                 this.sprite.setAnimation(1);
-                this.getCurrentScreen().setViewportX(vpX + 2);
                 this.stepCount--;
             } else if (this.keyDown[40]) {
                 this.sprite.setY(oldY + 2);
                 this.sprite.setAnimation(0);
-                this.getCurrentScreen().setViewportY(vpY + 2);
                 this.stepCount--;
             } else {
                 this.stepCount = 1;
@@ -127,15 +124,16 @@ export default class GameScene extends Scene {
                 this.stepCount = 24;
             }
 
-            if (this.map.getCollisionType(this.sprite.getX(), this.sprite.getY() + 16) !== 0 ||
-                this.map.getCollisionType(this.sprite.getX() + 16, this.sprite.getY() + 16) !== 0 ||
-                this.map.getCollisionType(this.sprite.getX(), this.sprite.getY() + 32) !== 0 ||
-                this.map.getCollisionType(this.sprite.getX() + 16, this.sprite.getY() + 32) !== 0) {
+            if (this.map.getCollisionType(this.sprite.getX() + 2, this.sprite.getY() + 18) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX() + 14, this.sprite.getY() + 18) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX() + 2, this.sprite.getY() + 30) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX() + 14, this.sprite.getY() + 30) !== 0) {
                 this.sprite.setX(oldX);
                 this.sprite.setY(oldY);
-                this.getCurrentScreen().setViewportX(vpX);
-                this.getCurrentScreen().setViewportY(vpY);
             }
+
+            this.getCurrentScreen().setViewportX(this.sprite.getAbsoluteX() - 128);
+            this.getCurrentScreen().setViewportY(this.sprite.getAbsoluteY() - 128);
         }
     }
 

@@ -8,6 +8,8 @@ export default class TileMap extends SceneObject {
     private tileHeight: number;
     private mapWidth: number;
     private mapHeight: number;
+    private drawWidth: number;
+    private drawHeight: number;
     private mapLayers: TileMapLayer[] = [];
     private collisionTypeData: number[] = [];
 
@@ -18,20 +20,48 @@ export default class TileMap extends SceneObject {
         this.mapHeight = mapHeight;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
+        this.drawWidth = 0;
+        this.drawHeight = 0;
         this.tileSets = [];
     }
 
-    public addTileSet(tileSet: TileSet): void {
+    public addTileSet(tileSet: TileSet): TileMap {
         this.tileSets.push(tileSet);
+        return this;
     }
 
     public getTileSets(): TileSet[] {
         return this.tileSets;
     }
 
-    public addLayer(layer: TileMapLayer, sortIndex: number = 0): void {
+    public setDrawSize(drawWidth: number, drawHeight: number): TileMap {
+        this.drawWidth = drawWidth;
+        this.drawHeight = drawHeight;
+        return this;
+    }
+
+    public setDrawWidth(drawWidth: number): TileMap {
+        this.drawWidth = drawWidth;
+        return this;
+    }
+
+    public setDrawHeight(drawHeight: number): TileMap {
+        this.drawHeight = drawHeight;
+        return this;
+    }
+
+    public getDrawWidth(): number {
+        return this.drawWidth;
+    }
+
+    public getDrawHeight(): number {
+        return this.drawHeight;
+    }
+
+    public addLayer(layer: TileMapLayer, sortIndex: number = 0): TileMap {
         this.mapLayers.push(layer);
         this.addChild(layer).setSortIndex(sortIndex);
+        return this;
     }
 
     public getLayer(name: string): TileMapLayer | null {
@@ -44,8 +74,9 @@ export default class TileMap extends SceneObject {
         return null;
     }
 
-    public setCollisionTypeData(data: number[]): void {
+    public setCollisionTypeData(data: number[]): TileMap {
         this.collisionTypeData = data;
+        return this;
     }
 
     public getTilePositionTopLeft(x: number, y: number): any {

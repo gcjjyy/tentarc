@@ -109,8 +109,6 @@ export default class Screen {
         const dt: number = (Date.now() - this.lastTime) / 1000;
         this.lastTime = Date.now();
 
-        requestAnimationFrame(() => { this.gameLoop(); });
-
         if (this.context2d) {
             this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
             this.context2d.save();
@@ -148,6 +146,8 @@ export default class Screen {
             }
             this.context2d.restore();
         }
+
+        requestAnimationFrame(() => { this.gameLoop(); });
     }
 
     public refreshScreenSize(): void {
@@ -266,7 +266,14 @@ export default class Screen {
         }
     }
 
-    public drawImage(image: Image, sx: number, sy: number, width: number, height: number, x: number, y: number) {
+    public drawRect(x: number, y: number, width: number, height: number, color: string): void {
+        if (this.context2d) {
+            this.context2d.fillStyle = color;
+            this.context2d.fillRect(x * this.scale, y * this.scale, width * this.scale, height * this.scale);
+        }
+    }
+
+    public drawImage(image: Image, sx: number, sy: number, width: number, height: number, x: number, y: number): void {
         if (this.context2d) {
             this.context2d.drawImage(
                 image.getImageElement(),
