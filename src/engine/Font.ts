@@ -1,3 +1,4 @@
+import Screen from './Screen';
 import Resource from './Resource';
 
 export default class Font extends Resource {
@@ -14,8 +15,7 @@ export default class Font extends Resource {
     }
 
     public drawGlyph = (
-        context2d: CanvasRenderingContext2D,
-        scale: number,
+        screen: Screen,
         x: number,
         y: number,
         ch: string): void => {

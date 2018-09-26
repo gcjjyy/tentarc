@@ -32,31 +32,17 @@ export default class TileMapLayer extends SceneObject {
         return this.name;
     }
 
-    public onDraw = (
-        context2d: CanvasRenderingContext2D,
-        designedWidth: number,
-        designedHeight: number,
-        scale: number): void => {
+    public onDraw = (screen: Screen): void => {
 
         const absX: number = this.getAbsoluteX();
         const absY: number = this.getAbsoluteY();
-
-        // Get starting offset position
-        const startX: number = Math.max(Math.trunc((absX * (-1)) / this.tileWidth), 0);
-        const startY: number = Math.max(Math.trunc((absY * (-1)) / this.tileHeight), 0);
-        const endX: number = Math.min(
-            startX + Math.ceil(designedWidth / this.tileWidth) + 1,
-            this.mapWidth);
-        const endY: number = Math.min(
-            startY + Math.ceil(designedHeight / this.tileHeight) + 1,
-            this.mapHeight);
 
         if (this.getParent() instanceof TileMap) {
 
             const tileSets = (this.getParent() as TileMap).getTileSets();
 
-            for (let i = startY; i < endY; i++) {
-                for (let j = startX; j < endX; j++) {
+            for (let i = 0; i < this.mapHeight; i++) {
+                for (let j = 0; j < this.mapWidth; j++) {
                     let tileNum: number = this.mapData[i * this.mapWidth + j];
                     if (tileNum > 0) {
                         tileNum -= 1;
@@ -69,15 +55,13 @@ export default class TileMapLayer extends SceneObject {
                             }
                         }
 
-                        context2d.drawImage(
-                            tileSets[tileSetIndex].getImageElement(),
+                        screen.drawImage(
+                            tileSets[tileSetIndex],
                             Math.trunc(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
                             Math.trunc(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,
                             this.tileWidth, this.tileHeight,
-                            (absX + (j * this.tileWidth)) * scale,
-                            (absY + (i * this.tileHeight)) * scale,
-                            this.tileWidth * scale,
-                            this.tileHeight * scale);
+                            (absX + (j * this.tileWidth)),
+                            (absY + (i * this.tileHeight)));
                     }
                 }
             }

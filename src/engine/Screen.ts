@@ -1,16 +1,20 @@
 import SceneObject from './SceneObject';
 import Scene from './Scene';
+import Image from './Image';
 
 export default class Screen {
-    public canvas: HTMLCanvasElement | null = null;
-    public canvasId: string = '';
-    public designedWidth: number = 0;
-    public designedHeight: number = 0;
-    public context2d: CanvasRenderingContext2D | null = null;
-    public scale: number = 1;
-
     public onLoad: (() => void) | null = null;
     public onResize: ((width: number, height: number) => void) | null = null;
+
+    private viewportX: number = 0;
+    private viewportY: number = 0;
+    private designedWidth: number = 0;
+    private designedHeight: number = 0;
+
+    private canvas: HTMLCanvasElement | null = null;
+    private canvasId: string = '';
+    private context2d: CanvasRenderingContext2D | null = null;
+    private scale: number = 1;
 
     private sceneStack: Scene[] = [];
     private lastTime: number;
@@ -138,7 +142,7 @@ export default class Screen {
 
                 for (const object of this.objectList) {
                     if (object.onDraw) {
-                        object.onDraw(this.context2d, this.designedWidth, this.designedHeight, this.scale);
+                        object.onDraw(this);
                     }
                 }
             }
@@ -189,6 +193,27 @@ export default class Screen {
         this.recalcScreenSize();
     }
 
+    public setViewportPosition(x: number, y: number): void {
+        this.viewportX = x;
+        this.viewportY = y;
+    }
+
+    public setViewportX(x: number): void {
+        this.viewportX = x;
+    }
+
+    public setViewportY(y: number): void {
+        this.viewportY = y;
+    }
+
+    public getViewportX(): number {
+        return this.viewportX;
+    }
+
+    public getViewportY(): number {
+        return this.viewportY;
+    }
+
     public onKeyDown(ev: KeyboardEvent): any {
         const currentScene = this.getCurrentScene();
         if (currentScene && currentScene.onKeyDown) {
@@ -229,6 +254,27 @@ export default class Screen {
 
     public run(): void {
         this.gameLoop();
+    }
+
+    public putPixel(x: number, y: number, color: string) {
+        if (this.context2d) {
+            this.context2d.fillStyle = color;
+            this.context2d.fillRect(
+                (x - this.viewportX) * this.scale,
+                (y - this.viewportY) * this.scale,
+                this.scale, this.scale);
+        }
+    }
+
+    public drawImage(image: Image, sx: number, sy: number, width: number, height: number, x: number, y: number) {
+        if (this.context2d) {
+            this.context2d.drawImage(
+                image.getImageElement(),
+                sx, sy,
+                width, height,
+                (x - this.viewportX) * this.scale, (y - this.viewportY) * this.scale,
+                width * this.scale, height * this.scale);
+        }
     }
 
     private getCurrentScene(): Scene | null {

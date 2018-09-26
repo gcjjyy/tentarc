@@ -14,6 +14,7 @@ export default class GameScene extends Scene {
     private keyDown: boolean[] = [];
     private map: TileMap | null = null;
     private sprite: Sprite | null = null;
+    private npc: Sprite | null = null;
     private talkimg: Image;
     private talk: Sprite | null = null;
     private fnt: DosFont;
@@ -28,7 +29,7 @@ export default class GameScene extends Scene {
         this.fnt = new DosFont('HMDEF.ENG', 'H04.HAN');
 
         this.bgm = new Sound();
-        this.bgm.load('./hotel.mp3', () => { this.bgm.play(); this.bgm.setVolume(0.5); });
+        // this.bgm.load('./hotel.mp3', () => { this.bgm.play(); this.bgm.setVolume(0.5); });
 
         this.step = new Sound();
         this.step.load('./ui-sound-14.ogg');
@@ -64,6 +65,15 @@ export default class GameScene extends Scene {
             }
         });
 
+        SpriteJsonLoader.load('npc.json', (sprite: Sprite | null): void => {
+            this.npc = sprite;
+            if (sprite) {
+                this.addSceneObject(sprite)
+                    .setPosition(this.getWidth() / 2 + 64, this.getHeight() / 2 + 64)
+                    .setSortIndex(2);
+            }
+        });
+
         this.talk = new Sprite(this.talkimg);
         this.talk.setRect(0, 48, 240, 96);
 
@@ -83,24 +93,30 @@ export default class GameScene extends Scene {
 
     public onUpdate = (dt: number): void => {
         if (this.map && this.sprite) {
-            const oldX = this.map.getX();
-            const oldY = this.map.getY();
+            const oldX = this.sprite.getX();
+            const oldY = this.sprite.getY();
+            const vpX = this.getCurrentScreen().getViewportX();
+            const vpY = this.getCurrentScreen().getViewportY();
 
             if (this.keyDown[37]) {
-                this.map.setX(this.map.getX() + 2);
+                this.sprite.setX(oldX - 2);
                 this.sprite.setAnimation(3);
+                this.getCurrentScreen().setViewportX(vpX - 2);
                 this.stepCount--;
             } else if (this.keyDown[38]) {
-                this.map.setY(this.map.getY() + 2);
+                this.sprite.setY(oldY - 2);
                 this.sprite.setAnimation(2);
+                this.getCurrentScreen().setViewportY(vpY - 2);
                 this.stepCount--;
             } else if (this.keyDown[39]) {
-                this.map.setX(this.map.getX() - 2);
+                this.sprite.setX(oldX + 2);
                 this.sprite.setAnimation(1);
+                this.getCurrentScreen().setViewportX(vpX + 2);
                 this.stepCount--;
             } else if (this.keyDown[40]) {
-                this.map.setY(this.map.getY() - 2);
+                this.sprite.setY(oldY + 2);
                 this.sprite.setAnimation(0);
+                this.getCurrentScreen().setViewportY(vpY + 2);
                 this.stepCount--;
             } else {
                 this.stepCount = 1;
@@ -111,12 +127,14 @@ export default class GameScene extends Scene {
                 this.stepCount = 24;
             }
 
-            if (this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 154) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 154) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 240, this.map.getY() * -1 + 163) !== 0 ||
-                this.map.getCollisionType(this.map.getX() * -1 + 256, this.map.getY() * -1 + 163) !== 0) {
-                this.map.setX(oldX);
-                this.map.setY(oldY);
+            if (this.map.getCollisionType(this.sprite.getX(), this.sprite.getY() + 16) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX() + 16, this.sprite.getY() + 16) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX(), this.sprite.getY() + 32) !== 0 ||
+                this.map.getCollisionType(this.sprite.getX() + 16, this.sprite.getY() + 32) !== 0) {
+                this.sprite.setX(oldX);
+                this.sprite.setY(oldY);
+                this.getCurrentScreen().setViewportX(vpX);
+                this.getCurrentScreen().setViewportY(vpY);
             }
         }
     }

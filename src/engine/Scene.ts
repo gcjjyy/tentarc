@@ -15,7 +15,7 @@ export default class Scene extends SceneObject {
     private screen: Screen;
 
     constructor(screen: Screen) {
-        super(screen.designedWidth, screen.designedHeight);
+        super(screen.getDesignedWidth(), screen.getDesignedHeight());
         this.screen = screen;
     }
 

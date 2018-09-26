@@ -2,11 +2,7 @@ import Screen from './Screen';
 
 export default class SceneObject {
     public onUpdate: ((dt: number) => void) | null = null;
-    public onDraw: ((
-        context2d: CanvasRenderingContext2D,
-        designedWidth: number,
-        designedHeight: number,
-        scale: number) => void) | null = null;
+    public onDraw: ((screen: Screen) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
     public onKeyUp: ((key: string, keyCode: number) => void) | null = null;
@@ -39,6 +35,12 @@ export default class SceneObject {
 
     public setY(y: number): SceneObject {
         this.y = y;
+        return this;
+    }
+
+    public setSize(width: number, height: number): SceneObject {
+        this.width = width;
+        this.height = height;
         return this;
     }
 

@@ -1,3 +1,4 @@
+import Screen from './Screen';
 import SceneObject from './SceneObject';
 import Image from './Image';
 import Animation from './Animation';
@@ -20,34 +21,26 @@ export default class Sprite extends SceneObject {
         }
     }
 
-    public onDraw = (
-        context2d: CanvasRenderingContext2D,
-        designedWidth: number,
-        designedHeight: number,
-        scale: number): void => {
+    public onDraw = (screen: Screen): void => {
 
         if (this.animations.length > 0) {
             const currentFrame = this.animations[this.curAnimation].getCurrentFrame();
             this.setWidth(currentFrame.getWidth());
             this.setHeight(currentFrame.getHeight());
 
-            context2d.drawImage(
-                this.image.getImageElement(),
+            screen.drawImage(
+                this.image,
                 currentFrame.getX(), currentFrame.getY(),
                 currentFrame.getWidth(), currentFrame.getHeight(),
-                this.getAbsoluteX() * scale,
-                this.getAbsoluteY() * scale,
-                currentFrame.getWidth() * scale,
-                currentFrame.getHeight() * scale);
+                this.getAbsoluteX(),
+                this.getAbsoluteY());
         } else {
-            context2d.drawImage(
-                this.image.getImageElement(),
+            screen.drawImage(
+                this.image,
                 this.rect.x, this.rect.y,
                 this.rect.width, this.rect.height,
-                this.getAbsoluteX() * scale,
-                this.getAbsoluteY() * scale,
-                this.rect.width * scale,
-                this.rect.height * scale);
+                this.getAbsoluteX(),
+                this.getAbsoluteY());
         }
     }
 

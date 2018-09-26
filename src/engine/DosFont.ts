@@ -1,4 +1,5 @@
 import Font from './Font';
+import Screen from './Screen';
 import LocalFileLoader from './LocalFileLoader';
 
 export default class DosFont extends Font {
@@ -80,8 +81,7 @@ export default class DosFont extends Font {
      * Return value: {x, y} of the glyph
      */
     public drawGlyph = (
-        context2d: CanvasRenderingContext2D,
-        scale: number,
+        screen: Screen,
         x: number,
         y: number,
         ch: string): void => {
@@ -89,7 +89,7 @@ export default class DosFont extends Font {
         let code = ch.charCodeAt(0);
 
         if (this.engFontReady && code < 256) {
-            this.drawEngGlyph(context2d, scale, x, y, code);
+            this.drawEngGlyph(screen, x, y, code);
         } else if (this.korFontReady) {
             code -= 0xac00;
 
@@ -101,51 +101,45 @@ export default class DosFont extends Font {
             const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
             const jongType = DosFont.jongType[joong];
 
-            this.drawKorGlyph(context2d, scale, x, y, choType * 20 + cho);
-            this.drawKorGlyph(context2d, scale, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+            this.drawKorGlyph(screen, x, y, choType * 20 + cho);
+            this.drawKorGlyph(screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
 
             if (jong) {
-                this.drawKorGlyph(context2d, scale, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                this.drawKorGlyph(screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
             }
         }
     }
 
     private drawEngGlyph(
-        context2d: CanvasRenderingContext2D,
-        scale: number,
+        screen: Screen,
         x: number,
         y: number,
         code: number): void {
 
-        context2d.fillStyle = 'white';
-
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.engFont[code][i] & (0x80 >> j)) {
-                    context2d.fillRect(x + (j * scale), y + (i * scale), scale, scale);
+                    screen.putPixel(x + j, y + i, 'white');
                 }
             }
         }
     }
 
     private drawKorGlyph(
-        context2d: CanvasRenderingContext2D,
-        scale: number,
+        screen: Screen,
         x: number,
         y: number,
         code: number): void {
 
-        context2d.fillStyle = 'white';
-
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x0080 >> j)) {
-                    context2d.fillRect(x + (j * scale), y + (i * scale), scale, scale);
+                    screen.putPixel(x + j, y + i, 'white');
                 }
             }
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x8000 >> j)) {
-                    context2d.fillRect(x + ((j + 8) * scale), y + (i * scale), scale, scale);
+                    screen.putPixel(x + (j + 8), y + i, 'white');
                 }
             }
         }
