@@ -34,15 +34,28 @@ export default class TileMapLayer extends SceneObject {
 
     public onDraw = (screen: Screen): void => {
 
-        const absX: number = this.getAbsoluteX();
-        const absY: number = this.getAbsoluteY();
-
         if (this.getParent() instanceof TileMap) {
+
+            const absX = this.getAbsoluteX();
+            const absY = this.getAbsoluteY();
+            const vpX = screen.getViewportX();
+            const vpY = screen.getViewportY();
+            const width = Math.trunc(screen.getDesignedWidth() / this.tileWidth);
+            const height = Math.trunc(screen.getDesignedHeight() / this.tileHeight);
+
+            const startX = Math.trunc((vpX - absX) / this.tileWidth);
+            const startY = Math.trunc((vpY - absY) / this.tileHeight);
+            const endX = startX + width + 2;
+            const endY = startY + height + 2;
 
             const tileSets = (this.getParent() as TileMap).getTileSets();
 
-            for (let i = 0; i < this.mapHeight; i++) {
-                for (let j = 0; j < this.mapWidth; j++) {
+            for (let i = startY; i < endY; i++) {
+                for (let j = startX; j < endX; j++) {
+                    if (i < 0 || j < 0 || i >= this.mapHeight || j >= this.mapWidth) {
+                        continue;
+                    }
+
                     let tileNum: number = this.mapData[i * this.mapWidth + j];
                     if (tileNum > 0) {
                         tileNum -= 1;
