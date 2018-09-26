@@ -1,5 +1,5 @@
-import Game from './Game';
-import GameObject from './GameObject';
+import Screen from './Screen';
+import SceneObject from './SceneObject';
 
 /**
  * Important!!
@@ -8,23 +8,23 @@ import GameObject from './GameObject';
  *    such as setX, setY, setWidth, setHeight.
  *    Because the position and size of the Scene will be used for picking objects.
  */
-export default class Scene extends GameObject {
+export default class Scene extends SceneObject {
     public onShow: (() => void) | null = null;
     public onHide: (() => void) | null = null;
 
-    private game: Game;
+    private screen: Screen;
 
-    constructor(game: Game) {
-        super(game.designedWidth, game.designedHeight);
-        this.game = game;
+    constructor(screen: Screen) {
+        super(screen.designedWidth, screen.designedHeight);
+        this.screen = screen;
     }
 
-    public addGameObject(object: GameObject): GameObject {
+    public addSceneObject(object: SceneObject): SceneObject {
         this.addChild(object);
         return object;
     }
 
-    public getCurrentGame(): Game {
-        return this.game;
+    public getCurrentScreen(): Screen {
+        return this.screen;
     }
 }

@@ -1,8 +1,8 @@
-import GameObject from './GameObject';
+import SceneObject from './SceneObject';
 import TileSet from './TileSet';
 import TileMapLayer from './TileMapLayer';
 
-export default class TileMap extends GameObject {
+export default class TileMap extends SceneObject {
     private tileSets: TileSet[];
     private tileWidth: number;
     private tileHeight: number;

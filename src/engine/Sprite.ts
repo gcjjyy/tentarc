@@ -1,16 +1,9 @@
-import Game from './Game';
-import GameObject from './GameObject';
+import SceneObject from './SceneObject';
 import Image from './Image';
 import Animation from './Animation';
+import Rect from './Rect';
 
-interface Rect {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
-
-export default class Sprite extends GameObject {
+export default class Sprite extends SceneObject {
     private image: Image;
     private animations: Animation[] = [];
     private curAnimation: number = 0;

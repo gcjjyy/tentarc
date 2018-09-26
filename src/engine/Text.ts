@@ -1,7 +1,7 @@
-import GameObject from './GameObject';
+import SceneObject from './SceneObject';
 import Font from './Font';
 
-export default class Text extends GameObject {
+export default class Text extends SceneObject {
     private font: Font;
     private text: string;
 

@@ -1,4 +1,4 @@
-import Game from './Game';
+import Screen from './Screen';
 import Image from './Image';
 
 export default class TileSet extends Image {

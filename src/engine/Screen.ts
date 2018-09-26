@@ -1,7 +1,7 @@
-import GameObject from './GameObject';
+import SceneObject from './SceneObject';
 import Scene from './Scene';
 
-export default class Game {
+export default class Screen {
     public canvas: HTMLCanvasElement | null = null;
     public canvasId: string = '';
     public designedWidth: number = 0;
@@ -9,13 +9,12 @@ export default class Game {
     public context2d: CanvasRenderingContext2D | null = null;
     public scale: number = 1;
 
-    public sceneStack: Scene[] = [];
-
     public onLoad: (() => void) | null = null;
     public onResize: ((width: number, height: number) => void) | null = null;
 
+    private sceneStack: Scene[] = [];
     private lastTime: number;
-    private objectList: GameObject[] = [];
+    private objectList: SceneObject[] = [];
 
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
         this.canvasId = canvasId;
@@ -123,7 +122,7 @@ export default class Game {
                 currentScene.traverse(this.objectList);
 
                 // Sort the list by sortIndex
-                this.objectList.sort((a: GameObject, b: GameObject): number => {
+                this.objectList.sort((a: SceneObject, b: SceneObject): number => {
                     if (a.getSortIndex() < b.getSortIndex()) {
                         return -1;
                     } else if (a.getSortIndex() === b.getSortIndex()) {
@@ -218,7 +217,7 @@ export default class Game {
 
         const currentScene = this.getCurrentScene();
         if (currentScene) {
-            const picked = currentScene.pickGameObject(x, y);
+            const picked = currentScene.pickSceneObject(x, y);
 
             if (picked) {
                 if (picked.onMouseDown) {

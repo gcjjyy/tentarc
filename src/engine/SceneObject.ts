@@ -1,6 +1,6 @@
-import Game from './Game';
+import Screen from './Screen';
 
-export default class GameObject {
+export default class SceneObject {
     public onUpdate: ((dt: number) => void) | null = null;
     public onDraw: ((
         context2d: CanvasRenderingContext2D,
@@ -17,37 +17,37 @@ export default class GameObject {
     private height: number = 0;
     private sortIndex: number = 1;
     private visible: boolean = true;
-    private parent: GameObject | null = null;
-    private childs: GameObject[] = [];
+    private parent: SceneObject | null = null;
+    private childs: SceneObject[] = [];
 
     constructor(width: number, height: number) {
         this.setWidth(width);
         this.setHeight(height);
     }
 
-    public setPosition(x: number, y: number): GameObject {
+    public setPosition(x: number, y: number): SceneObject {
         this.x = x;
         this.y = y;
 
         return this;
     }
 
-    public setX(x: number): GameObject {
+    public setX(x: number): SceneObject {
         this.x = x;
         return this;
     }
 
-    public setY(y: number): GameObject {
+    public setY(y: number): SceneObject {
         this.y = y;
         return this;
     }
 
-    public setWidth(width: number): GameObject {
+    public setWidth(width: number): SceneObject {
         this.width = width;
         return this;
     }
 
-    public setHeight(height: number): GameObject {
+    public setHeight(height: number): SceneObject {
         this.height = height;
         return this;
     }
@@ -74,7 +74,7 @@ export default class GameObject {
         }
     }
 
-    public setSortIndex(sortIndex: number): GameObject {
+    public setSortIndex(sortIndex: number): SceneObject {
         this.sortIndex = sortIndex;
         return this;
     }
@@ -83,7 +83,7 @@ export default class GameObject {
         return this.sortIndex;
     }
 
-    public setVisible(visible: boolean): GameObject {
+    public setVisible(visible: boolean): SceneObject {
         this.visible = visible;
         return this;
     }
@@ -92,22 +92,22 @@ export default class GameObject {
         return this.visible;
     }
 
-    public setParent(object: GameObject | null): GameObject {
+    public setParent(object: SceneObject | null): SceneObject {
         this.parent = object;
         return this;
     }
 
-    public getParent(): GameObject | null {
+    public getParent(): SceneObject | null {
         return this.parent;
     }
 
-    public addChild(object: GameObject): GameObject {
+    public addChild(object: SceneObject): SceneObject {
         object.setParent(this);
         this.childs.push(object);
         return object;
     }
 
-    public traverse(list: GameObject[]): void {
+    public traverse(list: SceneObject[]): void {
         if (this.visible) {
             list.push(this);
             for (const child of this.childs) {
@@ -126,12 +126,12 @@ export default class GameObject {
         }
     }
 
-    public pickGameObject(x: number, y: number): GameObject | null {
+    public pickSceneObject(x: number, y: number): SceneObject | null {
         if (x >= this.getAbsoluteX() && y >= this.getAbsoluteY() &&
             x < this.getAbsoluteX() + this.width && y < this.getAbsoluteY() + this.height) {
 
             for (const child of this.childs) {
-                const result = child.pickGameObject(x, y);
+                const result = child.pickSceneObject(x, y);
                 if (result) {
                     return result;
                 }

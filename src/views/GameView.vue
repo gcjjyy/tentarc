@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Game from '@/engine/Game';
+import Screen from '@/engine/Screen';
 import LogoScene from '@/LogoScene';
 
 @Component({
@@ -15,24 +15,24 @@ import LogoScene from '@/LogoScene';
 })
 export default class GameView extends Vue {
   private fullSize: boolean = false;
-  private game: Game;
+  private screen: Screen;
 
   constructor() {
     super();
 
-    this.game = new Game('canvas', 480, 270);
+    this.screen = new Screen('canvas', 480, 270);
 
-    this.game.onLoad = (): void => {
-        this.game.pushScene(new LogoScene(this.game));
+    this.screen.onLoad = (): void => {
+        this.screen.pushScene(new LogoScene(this.screen));
     };
 
-    this.game.onResize = (width: number, height: number): void => {
+    this.screen.onResize = (width: number, height: number): void => {
         if (this.fullSize) {
-            this.game.setDesignedScreenSize(width, height);
+            this.screen.setDesignedScreenSize(width, height);
         }
     };
 
-    this.game.run();
+    this.screen.run();
   }
 }
 </script>

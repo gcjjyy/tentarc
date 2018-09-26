@@ -1,4 +1,4 @@
-import Game from '@/engine/Game';
+import Screen from '@/engine/Screen';
 import Scene from '@/engine/Scene';
 import Image from '@/engine/Image';
 import DosFont from '@/engine/DosFont';
@@ -14,7 +14,7 @@ export default class LogoScene extends Scene {
     private fnt: DosFont;
     private sprite: Sprite | null = null;
 
-    constructor(game: Game) {
+    constructor(game: Screen) {
         super(game);
 
         this.img = new Image('tileset.png');
@@ -55,11 +55,11 @@ export default class LogoScene extends Scene {
             this.sprite.addAnimation(anim3);
             this.sprite.addAnimation(anim4);
 
-            this.addGameObject(this.sprite).setPosition(64, 64);
+            this.addSceneObject(this.sprite).setPosition(64, 64);
         }
 
-        this.addGameObject(new Text(this.fnt, 'ABCD1234ab\ncd!!')).setPosition(0, 16);
-        this.addGameObject(new Text(this.fnt, 'Hello~! 반가워!', 48, 16)).setPosition(0, 48);
+        this.addSceneObject(new Text(this.fnt, 'ABCD1234ab\ncd!!')).setPosition(0, 16);
+        this.addSceneObject(new Text(this.fnt, 'Hello~! 반가워!', 48, 16)).setPosition(0, 48);
     }
 
     public onHide = (): void => {
@@ -77,6 +77,6 @@ export default class LogoScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.getCurrentGame().pushScene(new GameScene(this.getCurrentGame()));
+        this.getCurrentScreen().pushScene(new GameScene(this.getCurrentScreen()));
     }
 }

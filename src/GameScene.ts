@@ -1,4 +1,4 @@
-import Game from '@/engine/Game';
+import Screen from '@/engine/Screen';
 import Scene from '@/engine/Scene';
 import Image from '@/engine/Image';
 import Sound from '@/engine/Sound';
@@ -21,7 +21,7 @@ export default class GameScene extends Scene {
     private step: Sound;
     private stepCount: number = 1;
 
-    constructor(game: Game) {
+    constructor(game: Screen) {
         super(game);
 
         this.talkimg = new Image('font.png');
@@ -35,7 +35,7 @@ export default class GameScene extends Scene {
 
         TiledJsonLoader.load('./tilemap.json', (map: TileMap | null): void => {
             if (map) {
-                this.addGameObject(map);
+                this.addSceneObject(map);
                 this.map = map;
 
                 const ground = this.map.getLayer('ground');
@@ -58,7 +58,7 @@ export default class GameScene extends Scene {
         SpriteJsonLoader.load('hero.json', (sprite: Sprite | null): void => {
             this.sprite = sprite;
             if (sprite) {
-                this.addGameObject(sprite)
+                this.addSceneObject(sprite)
                     .setPosition(this.getWidth() / 2, this.getHeight() / 2)
                     .setSortIndex(2);
             }
@@ -67,7 +67,7 @@ export default class GameScene extends Scene {
         this.talk = new Sprite(this.talkimg);
         this.talk.setRect(0, 48, 240, 96);
 
-        this.addGameObject(this.talk).setPosition(120, 8).addChild(
+        this.addSceneObject(this.talk).setPosition(120, 8).addChild(
             new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;;')
         );
         this.talk.setVisible(false);
@@ -136,6 +136,6 @@ export default class GameScene extends Scene {
     }
 
     public onMouseDown = (x: number, y: number): void => {
-        this.getCurrentGame().popScene();
+        this.getCurrentScreen().popScene();
     }
 }

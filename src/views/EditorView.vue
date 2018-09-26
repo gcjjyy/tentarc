@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Game from '@/engine/Game';
+import Screen from '@/engine/Screen';
 import LogoScene from '@/LogoScene';
 
 @Component({
@@ -20,37 +20,37 @@ import LogoScene from '@/LogoScene';
 })
 export default class EditorView extends Vue {
   private fullSize: boolean = false;
-  private game: Game;
-  private game2: Game;
+  private screen: Screen;
+  private screen2: Screen;
 
   constructor() {
     super();
 
-    this.game = new Game('canvas1', 480, 270);
-    this.game2 = new Game('canvas2', 128, 128);
+    this.screen = new Screen('canvas1', 480, 270);
+    this.screen2 = new Screen('canvas2', 128, 128);
 
-    this.game.onLoad = (): void => {
-        this.game.pushScene(new LogoScene(this.game));
+    this.screen.onLoad = (): void => {
+        this.screen.pushScene(new LogoScene(this.screen));
     };
 
-    this.game2.onLoad = (): void => {
-        this.game2.pushScene(new LogoScene(this.game2));
+    this.screen2.onLoad = (): void => {
+        this.screen2.pushScene(new LogoScene(this.screen2));
     };
 
-    this.game.onResize = (width: number, height: number): void => {
+    this.screen.onResize = (width: number, height: number): void => {
         if (this.fullSize) {
-            this.game.setDesignedScreenSize(width, height);
+            this.screen.setDesignedScreenSize(width, height);
         }
     };
 
-    this.game2.onResize = (width: number, height: number): void => {
+    this.screen2.onResize = (width: number, height: number): void => {
         if (this.fullSize) {
-            this.game2.setDesignedScreenSize(width, height);
+            this.screen2.setDesignedScreenSize(width, height);
         }
     };
 
-    this.game.run();
-    this.game2.run();
+    this.screen.run();
+    this.screen2.run();
   }
 }
 </script>
