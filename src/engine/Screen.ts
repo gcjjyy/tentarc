@@ -262,7 +262,7 @@ export default class Screen {
             this.context2d.fillRect(
                 ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
                 ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
-                this.scale, this.scale);
+                this.scale * sender.getScale(), this.scale * sender.getScale());
         }
     }
 
