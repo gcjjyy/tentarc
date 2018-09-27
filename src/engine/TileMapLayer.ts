@@ -37,8 +37,8 @@ export default class TileMapLayer extends SceneObject {
         const parent: TileMap = this.getParent() as TileMap;
 
         if (parent) {
-            const absX = this.getAbsoluteX();
-            const absY = this.getAbsoluteY();
+            const absX = this.getGlobalX();
+            const absY = this.getGlobalY();
             const vpX = screen.getViewportX();
             const vpY = screen.getViewportY();
             const width = (parent.getDrawWidth() !== 0) ?

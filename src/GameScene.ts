@@ -136,8 +136,8 @@ export default class GameScene extends Scene {
                 this.sprite.setY(oldY);
             }
 
-            this.getCurrentScreen().setViewportX(this.sprite.getAbsoluteX() - 128);
-            this.getCurrentScreen().setViewportY(this.sprite.getAbsoluteY() - 128);
+            this.getCurrentScreen().setViewportX(this.sprite.getGlobalX() - 128);
+            this.getCurrentScreen().setViewportY(this.sprite.getGlobalY() - 128);
         }
     }
 

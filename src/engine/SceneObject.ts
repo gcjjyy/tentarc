@@ -75,19 +75,19 @@ export default class SceneObject {
     public getWidth(): number { return this.width; }
     public getHeight(): number { return this.height; }
 
-    public getAbsoluteX(): number {
+    public getGlobalX(): number {
         if (!this.parent) {
             return (this.x * this.scale);
         } else {
-            return (this.x * this.scale) + this.parent.getAbsoluteX();
+            return (this.x * this.scale) + this.parent.getGlobalX();
         }
     }
 
-    public getAbsoluteY(): number {
+    public getGlobalY(): number {
         if (!this.parent) {
             return (this.y * this.scale);
         } else {
-            return (this.y * this.scale) + this.parent.getAbsoluteY();
+            return (this.y * this.scale) + this.parent.getGlobalY();
         }
     }
 
@@ -100,11 +100,11 @@ export default class SceneObject {
         return this.scale;
     }
 
-    public getAbsoluteScale(): number {
+    public getGlobalScale(): number {
         if (!this.parent) {
             return this.scale;
         } else {
-            return this.scale * this.parent.getAbsoluteScale();
+            return this.scale * this.parent.getGlobalScale();
         }
     }
 
@@ -161,8 +161,8 @@ export default class SceneObject {
     }
 
     public pickSceneObject(x: number, y: number): SceneObject | null {
-        if (x >= this.getAbsoluteX() && y >= this.getAbsoluteY() &&
-            x < this.getAbsoluteX() + this.width && y < this.getAbsoluteY() + this.height) {
+        if (x >= this.getGlobalX() && y >= this.getGlobalY() &&
+            x < this.getGlobalX() + this.width && y < this.getGlobalY() + this.height) {
 
             for (const child of this.childs) {
                 const result = child.pickSceneObject(x, y);

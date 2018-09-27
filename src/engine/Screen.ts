@@ -128,7 +128,7 @@ export default class Screen {
                     if (a.getSortIndex() < b.getSortIndex()) {
                         return -1;
                     } else if (a.getSortIndex() === b.getSortIndex()) {
-                        if (a.getAbsoluteY() <= b.getAbsoluteY()) {
+                        if (a.getGlobalY() <= b.getGlobalY()) {
                             return -1;
                         } else {
                             return 1;
@@ -246,7 +246,7 @@ export default class Screen {
 
             if (picked) {
                 if (picked.onMouseDown) {
-                    picked.onMouseDown(x - picked.getAbsoluteX(), y - picked.getAbsoluteY());
+                    picked.onMouseDown(x - picked.getGlobalX(), y - picked.getGlobalY());
                 }
             }
         }
@@ -256,12 +256,12 @@ export default class Screen {
         this.gameLoop();
     }
 
-    public putPixel(sender: SceneObject, x: number, y: number, color: string) {
+    public putPixel(sender: SceneObject, localX: number, localY: number, color: string) {
         if (this.context2d) {
 
-            const absx = sender.getAbsoluteX() + (x * sender.getScale());
-            const absy = sender.getAbsoluteY() + (y * sender.getScale());
-            const absscale = sender.getAbsoluteScale();
+            const absx = sender.getGlobalX() + (localX * sender.getScale());
+            const absy = sender.getGlobalY() + (localY * sender.getScale());
+            const absscale = sender.getGlobalScale();
 
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
@@ -271,12 +271,18 @@ export default class Screen {
         }
     }
 
-    public drawRect(sender: SceneObject, x: number, y: number, width: number, height: number, color: string): void {
+    public drawRect(
+        sender: SceneObject,
+        localX: number,
+        localY: number,
+        width: number,
+        height: number,
+        color: string): void {
         if (this.context2d) {
 
-            const absx = sender.getAbsoluteX() + (x * sender.getScale());
-            const absy = sender.getAbsoluteY() + (y * sender.getScale());
-            const absscale = sender.getAbsoluteScale();
+            const absx = sender.getGlobalX() + (localX * sender.getScale());
+            const absy = sender.getGlobalY() + (localY * sender.getScale());
+            const absscale = sender.getGlobalScale();
 
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
@@ -294,14 +300,14 @@ export default class Screen {
         sy: number,
         width: number,
         height: number,
-        x: number,
-        y: number): void {
+        localX: number,
+        localY: number): void {
 
         if (this.context2d) {
 
-            const absx = sender.getAbsoluteX() + (x * sender.getScale());
-            const absy = sender.getAbsoluteY() + (y * sender.getScale());
-            const absscale = sender.getAbsoluteScale();
+            const absx = sender.getGlobalX() + (localX * sender.getScale());
+            const absy = sender.getGlobalY() + (localY * sender.getScale());
+            const absscale = sender.getGlobalScale();
 
             this.context2d.drawImage(
                 image.getImageElement(),
