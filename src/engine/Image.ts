@@ -1,4 +1,3 @@
-import Screen from './Screen';
 import Resource from './Resource';
 
 export default class Image extends Resource {

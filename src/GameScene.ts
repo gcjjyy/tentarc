@@ -1,7 +1,7 @@
 import Screen from '@/engine/Screen';
 import Scene from '@/engine/Scene';
 import Image from '@/engine/Image';
-import Sound from '@/engine/Sound';
+import Audio from '@/engine/Audio';
 import Sprite from '@/engine/Sprite';
 import Text from '@/engine/Text';
 import DosFont from '@/engine/DosFont';
@@ -18,8 +18,8 @@ export default class GameScene extends Scene {
     private talkimg: Image;
     private talk: Sprite | null = null;
     private fnt: DosFont;
-    private bgm: Sound;
-    private step: Sound;
+    private bgm: Audio;
+    private step: Audio;
     private stepCount: number = 1;
 
     constructor(game: Screen) {
@@ -28,11 +28,10 @@ export default class GameScene extends Scene {
         this.talkimg = new Image('font.png');
         this.fnt = new DosFont('HMDEF.ENG', 'H04.HAN');
 
-        this.bgm = new Sound();
-        // this.bgm.load('./hotel.mp3', () => { this.bgm.play(); this.bgm.setVolume(0.5); });
+        this.bgm = new Audio('./hotel.mp3');
+        this.bgm.play(0.25);
 
-        this.step = new Sound();
-        this.step.load('./ui-sound-14.ogg');
+        this.step = new Audio('./ui-sound-14.ogg');
 
         TiledJsonLoader.load('./tilemap.json', (map: TileMap | null): void => {
             if (map) {
