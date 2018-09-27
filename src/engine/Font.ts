@@ -20,6 +20,7 @@ export default class Font extends Resource {
         screen: Screen,
         x: number,
         y: number,
+        fontColor: string,
         ch: string): void => {
             return;
         }

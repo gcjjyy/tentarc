@@ -86,12 +86,13 @@ export default class DosFont extends Font {
         screen: Screen,
         x: number,
         y: number,
+        fontColor: string,
         ch: string): void => {
 
         let code = ch.charCodeAt(0);
 
         if (this.engFontReady && code < 256) {
-            this.drawEngGlyph(sender, screen, x, y, code);
+            this.drawEngGlyph(sender, screen, x, y, fontColor, code);
         } else if (this.korFontReady) {
             code -= 0xac00;
 
@@ -103,11 +104,11 @@ export default class DosFont extends Font {
             const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
             const jongType = DosFont.jongType[joong];
 
-            this.drawKorGlyph(sender, screen, x, y, choType * 20 + cho);
-            this.drawKorGlyph(sender, screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+            this.drawKorGlyph(sender, screen, x, y, fontColor, choType * 20 + cho);
+            this.drawKorGlyph(sender, screen, x, y, fontColor, DosFont.indexJoongStart + (joongType * 22 + joong));
 
             if (jong) {
-                this.drawKorGlyph(sender, screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                this.drawKorGlyph(sender, screen, x, y, fontColor, DosFont.indexJongStart + (jongType * 28 + jong));
             }
         }
     }
@@ -117,12 +118,13 @@ export default class DosFont extends Font {
         screen: Screen,
         x: number,
         y: number,
+        fontColor: string,
         code: number): void {
 
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.engFont[code][i] & (0x80 >> j)) {
-                    screen.putPixel(sender, x + j, y + i, 'white');
+                    screen.putPixel(sender, x + j, y + i, fontColor);
                 }
             }
         }
@@ -133,17 +135,18 @@ export default class DosFont extends Font {
         screen: Screen,
         x: number,
         y: number,
+        fontColor: string,
         code: number): void {
 
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x0080 >> j)) {
-                    screen.putPixel(sender, x + j, y + i, 'white');
+                    screen.putPixel(sender, x + j, y + i, fontColor);
                 }
             }
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x8000 >> j)) {
-                    screen.putPixel(sender, x + (j + 8), y + i, 'white');
+                    screen.putPixel(sender, x + (j + 8), y + i, fontColor);
                 }
             }
         }

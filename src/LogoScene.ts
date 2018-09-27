@@ -59,7 +59,7 @@ export default class LogoScene extends Scene {
         }
 
         this.addSceneObject(new Text(this.fnt, 'ABCD1234ab\ncd!!')).setPosition(0, 16);
-        this.addSceneObject(new Text(this.fnt, 'Hello~! 반가워!', 48, 16)).setPosition(0, 48);
+        this.addSceneObject(new Text(this.fnt, 'Hello~! 반가워!', 'yellow', 48, 16)).setPosition(0, 48);
     }
 
     public onHide = (): void => {
