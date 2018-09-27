@@ -79,6 +79,7 @@ export default class GameScene extends Scene {
 
         this.talk = new Sprite(this.talkimg);
         this.talk.setRect(0, 48, 240, 96);
+        this.talk.setPinned(true);
 
         this.addSceneObject(this.talk).setPosition(120, 8).addChild(
             new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;;')

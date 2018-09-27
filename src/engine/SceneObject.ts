@@ -15,6 +15,7 @@ export default class SceneObject {
     private visible: boolean = true;
     private parent: SceneObject | null = null;
     private childs: SceneObject[] = [];
+    private pinned: boolean = false;
 
     constructor(width: number, height: number) {
         this.setWidth(width);
@@ -36,6 +37,15 @@ export default class SceneObject {
     public setY(y: number): SceneObject {
         this.y = y;
         return this;
+    }
+
+    public setPinned(pinned: boolean): SceneObject {
+        this.pinned = pinned;
+        return this;
+    }
+
+    public getPinned(): boolean {
+        return this.pinned;
     }
 
     public setSize(width: number, height: number): SceneObject {

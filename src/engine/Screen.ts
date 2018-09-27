@@ -266,20 +266,34 @@ export default class Screen {
         }
     }
 
-    public drawRect(x: number, y: number, width: number, height: number, color: string): void {
+    public drawRect(sender: SceneObject, x: number, y: number, width: number, height: number, color: string): void {
         if (this.context2d) {
             this.context2d.fillStyle = color;
-            this.context2d.fillRect(x * this.scale, y * this.scale, width * this.scale, height * this.scale);
+            this.context2d.fillRect(
+                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale,
+                width * this.scale,
+                height * this.scale);
         }
     }
 
-    public drawImage(image: Image, sx: number, sy: number, width: number, height: number, x: number, y: number): void {
+    public drawImage(
+        sender: SceneObject,
+        image: Image,
+        sx: number,
+        sy: number,
+        width: number,
+        height: number,
+        x: number,
+        y: number): void {
+
         if (this.context2d) {
             this.context2d.drawImage(
                 image.getImageElement(),
                 sx, sy,
                 width, height,
-                (x - this.viewportX) * this.scale, (y - this.viewportY) * this.scale,
+                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale,
                 width * this.scale, height * this.scale);
         }
     }

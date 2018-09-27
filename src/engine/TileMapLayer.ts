@@ -74,6 +74,7 @@ export default class TileMapLayer extends SceneObject {
                         }
 
                         screen.drawImage(
+                            this,
                             tileSets[tileSetIndex],
                             Math.floor(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
                             Math.floor(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,

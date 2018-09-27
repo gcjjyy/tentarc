@@ -29,6 +29,7 @@ export default class Sprite extends SceneObject {
             this.setHeight(currentFrame.getHeight());
 
             screen.drawImage(
+                this,
                 this.image,
                 currentFrame.getX(), currentFrame.getY(),
                 currentFrame.getWidth(), currentFrame.getHeight(),
@@ -36,6 +37,7 @@ export default class Sprite extends SceneObject {
                 this.getAbsoluteY());
         } else {
             screen.drawImage(
+                this,
                 this.image,
                 this.rect.x, this.rect.y,
                 this.rect.width, this.rect.height,
