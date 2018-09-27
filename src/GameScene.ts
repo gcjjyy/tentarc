@@ -15,8 +15,7 @@ export default class GameScene extends Scene {
     private map: TileMap | null = null;
     private sprite: Sprite | null = null;
     private npc: Sprite | null = null;
-    private talkimg: Image;
-    private talk: Sprite | null = null;
+    private talk: Plane | null = null;
     private fnt: DosFont;
     private bgm: Audio;
     private step: Audio;
@@ -25,7 +24,6 @@ export default class GameScene extends Scene {
     constructor(game: Screen) {
         super(game);
 
-        this.talkimg = new Image('font.png');
         this.fnt = new DosFont('HMDEF.ENG', 'H04.HAN');
 
         this.bgm = new Audio('./hotel.mp3');
@@ -79,15 +77,15 @@ export default class GameScene extends Scene {
             }
         });
 
-        this.talk = new Sprite(this.talkimg);
-        this.talk.setRect(0, 48, 240, 96);
+        this.talk = new Plane(240, 96, '#00000080');
+        this.talk.setPosition(16, 16);
         this.talk.setPinned(true);
 
-        this.addSceneObject(this.talk).setPosition(16, 16).addChild(
-            new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;; 반갑습니다.\n 여러분의 성원에 힘입어 이렇게 게임을 만들게 되었습니다. 가나다라마바사아자차카타파하 에헤 우헤우헤우허허 하고싶은 말들은 너무너무 많은데.', 'black')
+        this.addSceneObject(this.talk).setPosition(16, 16).setSortIndex(20).addChild(
+            new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;; 반갑습니다.\n 여러분의 성원에 힘입어 이렇게 게임을 만들게 되었습니다. 가나다라마바사아자차카타파하 에헤 우헤우헤우허허 하고싶은 말들은 너무너무 많은데.', 'white')
                 .setScale(0.5)
                 .setPosition(32, 32)
-                .setSize(416, 162)
+                .setSize(416, 128)
         );
         this.talk.setVisible(false);
     }

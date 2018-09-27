@@ -125,9 +125,9 @@ export default class Screen {
 
                 // Sort the list by sortIndex
                 this.objectList.sort((a: SceneObject, b: SceneObject): number => {
-                    if (a.getSortIndex() < b.getSortIndex()) {
+                    if (a.getGlobalSortIndex() < b.getGlobalSortIndex()) {
                         return -1;
-                    } else if (a.getSortIndex() === b.getSortIndex()) {
+                    } else if (a.getGlobalSortIndex() === b.getGlobalSortIndex()) {
                         if (a.getGlobalY() <= b.getGlobalY()) {
                             return -1;
                         } else {

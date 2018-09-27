@@ -117,6 +117,14 @@ export default class SceneObject {
         return this.sortIndex;
     }
 
+    public getGlobalSortIndex(): number {
+        if (!this.parent) {
+            return this.sortIndex;
+        } else {
+            return this.sortIndex + this.parent.getGlobalSortIndex();
+        }
+    }
+
     public setVisible(visible: boolean): SceneObject {
         this.visible = visible;
         return this;
