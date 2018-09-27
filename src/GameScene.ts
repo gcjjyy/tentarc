@@ -55,7 +55,10 @@ export default class GameScene extends Scene {
                 }
 
                 map.setDrawSize(16, 16);
-                this.addSceneObject(new Plane(480 - 16 * 16, 270, 'black')).setX(16 * 17).setSortIndex(10);
+                this.addSceneObject(new Plane(480 - 16 * 16, 270, 'black'))
+                    .setX(16 * 17)
+                    .setPinned(true)
+                    .setSortIndex(10);
             }
         });
 

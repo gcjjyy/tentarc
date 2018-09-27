@@ -11,6 +11,7 @@ export default class SceneObject {
     private y: number = 0;
     private width: number = 0;
     private height: number = 0;
+    private scale: number = 1;
     private sortIndex: number = 1;
     private visible: boolean = true;
     private parent: SceneObject | null = null;
@@ -45,7 +46,11 @@ export default class SceneObject {
     }
 
     public getPinned(): boolean {
-        return this.pinned;
+        if (!this.parent) {
+            return this.pinned;
+        } else {
+            return this.pinned || this.parent.getPinned();
+        }
     }
 
     public setSize(width: number, height: number): SceneObject {
@@ -72,17 +77,34 @@ export default class SceneObject {
 
     public getAbsoluteX(): number {
         if (!this.parent) {
-            return this.getX();
+            return this.x;
         } else {
-            return this.getX() + this.parent.getX();
+            return this.x + this.parent.getAbsoluteX();
         }
     }
 
     public getAbsoluteY(): number {
         if (!this.parent) {
-            return this.getY();
+            return this.y;
         } else {
-            return this.getY() + this.parent.getY();
+            return this.y + this.parent.getAbsoluteY();
+        }
+    }
+
+    public setScale(scale: number): SceneObject {
+        this.scale = scale;
+        return this;
+    }
+
+    public getScale(): number {
+        return this.scale;
+    }
+
+    public getAbsoluteScale(): number {
+        if (!this.parent) {
+            return this.scale;
+        } else {
+            return this.scale * this.parent.getAbsoluteScale();
         }
     }
 

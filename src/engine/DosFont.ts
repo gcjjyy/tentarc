@@ -1,6 +1,7 @@
 import Font from './Font';
 import Screen from './Screen';
 import LocalFileLoader from './LocalFileLoader';
+import SceneObject from '@/engine/SceneObject';
 
 export default class DosFont extends Font {
     private static choType: number[] = [
@@ -81,6 +82,7 @@ export default class DosFont extends Font {
      * Return value: {x, y} of the glyph
      */
     public drawGlyph = (
+        sender: SceneObject,
         screen: Screen,
         x: number,
         y: number,
@@ -89,7 +91,7 @@ export default class DosFont extends Font {
         let code = ch.charCodeAt(0);
 
         if (this.engFontReady && code < 256) {
-            this.drawEngGlyph(screen, x, y, code);
+            this.drawEngGlyph(sender, screen, x, y, code);
         } else if (this.korFontReady) {
             code -= 0xac00;
 
@@ -101,16 +103,17 @@ export default class DosFont extends Font {
             const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
             const jongType = DosFont.jongType[joong];
 
-            this.drawKorGlyph(screen, x, y, choType * 20 + cho);
-            this.drawKorGlyph(screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+            this.drawKorGlyph(sender, screen, x, y, choType * 20 + cho);
+            this.drawKorGlyph(sender, screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
 
             if (jong) {
-                this.drawKorGlyph(screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                this.drawKorGlyph(sender, screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
             }
         }
     }
 
     private drawEngGlyph(
+        sender: SceneObject,
         screen: Screen,
         x: number,
         y: number,
@@ -119,13 +122,14 @@ export default class DosFont extends Font {
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.engFont[code][i] & (0x80 >> j)) {
-                    screen.putPixel(x + j, y + i, 'white');
+                    screen.putPixel(sender, x + j, y + i, 'white');
                 }
             }
         }
     }
 
     private drawKorGlyph(
+        sender: SceneObject,
         screen: Screen,
         x: number,
         y: number,
@@ -134,12 +138,12 @@ export default class DosFont extends Font {
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x0080 >> j)) {
-                    screen.putPixel(x + j, y + i, 'white');
+                    screen.putPixel(sender, x + j, y + i, 'white');
                 }
             }
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x8000 >> j)) {
-                    screen.putPixel(x + (j + 8), y + i, 'white');
+                    screen.putPixel(sender, x + (j + 8), y + i, 'white');
                 }
             }
         }

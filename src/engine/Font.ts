@@ -1,5 +1,6 @@
 import Screen from './Screen';
 import Resource from './Resource';
+import SceneObject from '@/engine/SceneObject';
 
 export default class Font extends Resource {
     constructor() {
@@ -15,6 +16,7 @@ export default class Font extends Resource {
     }
 
     public drawGlyph = (
+        sender: SceneObject,
         screen: Screen,
         x: number,
         y: number,

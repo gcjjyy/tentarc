@@ -23,7 +23,7 @@ export default class Text extends SceneObject {
                 x = this.getAbsoluteX();
                 y += this.font.getHeight();
             } else {
-                this.font.drawGlyph(screen, x, y, ch);
+                this.font.drawGlyph(this, screen, x, y, ch);
                 if (this.getWidth() === 0 ||
                     (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
                     x += this.font.getWidth(ch);

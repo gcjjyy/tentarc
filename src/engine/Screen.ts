@@ -256,12 +256,12 @@ export default class Screen {
         this.gameLoop();
     }
 
-    public putPixel(x: number, y: number, color: string) {
+    public putPixel(sender: SceneObject, x: number, y: number, color: string) {
         if (this.context2d) {
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
-                (x - this.viewportX) * this.scale,
-                (y - this.viewportY) * this.scale,
+                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
+                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
                 this.scale, this.scale);
         }
     }
@@ -270,10 +270,10 @@ export default class Screen {
         if (this.context2d) {
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
-                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale,
-                width * this.scale,
-                height * this.scale);
+                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
+                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
+                width * this.scale * sender.getScale(),
+                height * this.scale * sender.getScale());
         }
     }
 
@@ -292,9 +292,9 @@ export default class Screen {
                 image.getImageElement(),
                 sx, sy,
                 width, height,
-                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale,
-                width * this.scale, height * this.scale);
+                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
+                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
+                width * this.scale * sender.getScale(), height * this.scale * sender.getScale());
         }
     }
 
