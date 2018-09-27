@@ -33,16 +33,14 @@ export default class Sprite extends SceneObject {
                 this.image,
                 currentFrame.getX(), currentFrame.getY(),
                 currentFrame.getWidth(), currentFrame.getHeight(),
-                this.getAbsoluteX(),
-                this.getAbsoluteY());
+                0, 0);
         } else {
             screen.drawImage(
                 this,
                 this.image,
                 this.rect.x, this.rect.y,
                 this.rect.width, this.rect.height,
-                this.getAbsoluteX(),
-                this.getAbsoluteY());
+                0, 0);
         }
     }
 

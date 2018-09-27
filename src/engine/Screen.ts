@@ -258,22 +258,32 @@ export default class Screen {
 
     public putPixel(sender: SceneObject, x: number, y: number, color: string) {
         if (this.context2d) {
+
+            const absx = sender.getAbsoluteX() + (x * sender.getScale());
+            const absy = sender.getAbsoluteY() + (y * sender.getScale());
+            const absscale = sender.getAbsoluteScale();
+
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
-                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
-                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
-                this.scale * sender.getScale(), this.scale * sender.getScale());
+                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+                absscale * this.scale, absscale * this.scale);
         }
     }
 
     public drawRect(sender: SceneObject, x: number, y: number, width: number, height: number, color: string): void {
         if (this.context2d) {
+
+            const absx = sender.getAbsoluteX() + (x * sender.getScale());
+            const absy = sender.getAbsoluteY() + (y * sender.getScale());
+            const absscale = sender.getAbsoluteScale();
+
             this.context2d.fillStyle = color;
             this.context2d.fillRect(
-                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
-                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
-                width * this.scale * sender.getScale(),
-                height * this.scale * sender.getScale());
+                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+                width * absscale * this.scale,
+                height * absscale * this.scale);
         }
     }
 
@@ -288,13 +298,19 @@ export default class Screen {
         y: number): void {
 
         if (this.context2d) {
+
+            const absx = sender.getAbsoluteX() + (x * sender.getScale());
+            const absy = sender.getAbsoluteY() + (y * sender.getScale());
+            const absscale = sender.getAbsoluteScale();
+
             this.context2d.drawImage(
                 image.getImageElement(),
                 sx, sy,
                 width, height,
-                ((sender.getPinned()) ? x : (x - this.viewportX)) * this.scale * sender.getScale(),
-                ((sender.getPinned()) ? y : (y - this.viewportY)) * this.scale * sender.getScale(),
-                width * this.scale * sender.getScale(), height * this.scale * sender.getScale());
+                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+                width * absscale * this.scale,
+                height * absscale * this.scale);
         }
     }
 

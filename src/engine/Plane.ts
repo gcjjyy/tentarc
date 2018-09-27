@@ -10,6 +10,6 @@ export default class Plane extends SceneObject {
     }
 
     public onDraw = (screen: Screen): void => {
-        screen.drawRect(this, this.getAbsoluteX(), this.getAbsoluteY(), this.getWidth(), this.getHeight(), this.color);
+        screen.drawRect(this, 0, 0, this.getWidth(), this.getHeight(), this.color);
     }
 }

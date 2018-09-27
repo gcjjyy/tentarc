@@ -15,20 +15,19 @@ export default class Text extends SceneObject {
 
     public onDraw = (screen: Screen): void => {
 
-        let x: number = this.getAbsoluteX();
-        let y: number = this.getAbsoluteY();
+        let x: number = 0;
+        let y: number = 0;
 
         for (const ch of this.text) {
             if (ch === '\n') {
-                x = this.getAbsoluteX();
+                x = 0;
                 y += this.font.getHeight();
             } else {
                 this.font.drawGlyph(this, screen, x, y, ch);
-                if (this.getWidth() === 0 ||
-                    (x + this.font.getWidth(ch) < (this.getAbsoluteX() + this.getWidth()))) {
+                if (this.getWidth() === 0 || (x + this.font.getWidth(ch) < this.getWidth())) {
                     x += this.font.getWidth(ch);
                 } else {
-                    x = this.getAbsoluteX();
+                    x = 0;
                     y += this.font.getHeight();
                 }
             }

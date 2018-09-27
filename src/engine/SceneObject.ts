@@ -77,17 +77,17 @@ export default class SceneObject {
 
     public getAbsoluteX(): number {
         if (!this.parent) {
-            return this.x;
+            return (this.x * this.scale);
         } else {
-            return this.x + this.parent.getAbsoluteX();
+            return (this.x * this.scale) + this.parent.getAbsoluteX();
         }
     }
 
     public getAbsoluteY(): number {
         if (!this.parent) {
-            return this.y;
+            return (this.y * this.scale);
         } else {
-            return this.y + this.parent.getAbsoluteY();
+            return (this.y * this.scale) + this.parent.getAbsoluteY();
         }
     }
 
