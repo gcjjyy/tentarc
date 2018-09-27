@@ -2,7 +2,7 @@ import Resource from './Resource';
 import LocalFileLoader from './LocalFileLoader';
 
 export default class Sound extends Resource {
-    private context: AudioContext;
+    private context: AudioContext | null;
     private source: AudioBufferSourceNode | null = null;
     private gain: GainNode | null = null;
     private buffer: AudioBuffer | null = null;
@@ -12,7 +12,11 @@ export default class Sound extends Resource {
 
     constructor() {
         super();
-        this.context = new AudioContext();
+        try {
+            this.context = new AudioContext();
+        } catch (e) {
+            this.context = null;
+        }
     }
 
     public load(filename: string, onload: (() => void) | null = null): void {
@@ -28,7 +32,7 @@ export default class Sound extends Resource {
     }
 
     public play(): void {
-        if (this.loadComplete) {
+        if (this.context && this.loadComplete) {
             this.source = this.context.createBufferSource();
             this.gain = this.context.createGain();
             this.gain.gain.value = this.volume;
