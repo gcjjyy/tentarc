@@ -43,13 +43,13 @@ export default class TileMapLayer extends SceneObject {
             const vpY = screen.getViewportY();
             const width = (parent.getDrawWidth() !== 0) ?
                 parent.getDrawWidth() :
-                Math.trunc(screen.getDesignedWidth() / this.tileWidth);
+                Math.floor(screen.getDesignedWidth() / this.tileWidth);
             const height = (parent.getDrawHeight() !== 0) ?
                 parent.getDrawHeight() :
-                Math.trunc(screen.getDesignedHeight() / this.tileHeight);
+                Math.floor(screen.getDesignedHeight() / this.tileHeight);
 
-            const startX = Math.trunc((vpX - absX) / this.tileWidth);
-            const startY = Math.trunc((vpY - absY) / this.tileHeight);
+            const startX = Math.floor((vpX - absX) / this.tileWidth);
+            const startY = Math.floor((vpY - absY) / this.tileHeight);
             const endX = startX + width + 2;
             const endY = startY + height + 2;
 
@@ -75,8 +75,8 @@ export default class TileMapLayer extends SceneObject {
 
                         screen.drawImage(
                             tileSets[tileSetIndex],
-                            Math.trunc(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
-                            Math.trunc(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,
+                            Math.floor(tileNum % tileSets[tileSetIndex].getColumns()) * this.tileWidth,
+                            Math.floor(tileNum / tileSets[tileSetIndex].getColumns()) * this.tileHeight,
                             this.tileWidth, this.tileHeight,
                             (absX + (j * this.tileWidth)),
                             (absY + (i * this.tileHeight)));

@@ -80,8 +80,8 @@ export default class TileMap extends SceneObject {
     }
 
     public getTilePositionTopLeft(x: number, y: number): any {
-        const row = Math.trunc(y / this.tileHeight);
-        const col = Math.trunc(x / this.tileWidth);
+        const row = Math.floor(y / this.tileHeight);
+        const col = Math.floor(x / this.tileWidth);
 
         return {
             x: col * this.tileWidth,
@@ -90,8 +90,8 @@ export default class TileMap extends SceneObject {
     }
 
     public getTilePositionCenter(x: number, y: number): any {
-        const row = Math.trunc(y / this.tileHeight);
-        const col = Math.trunc(x / this.tileWidth);
+        const row = Math.floor(y / this.tileHeight);
+        const col = Math.floor(x / this.tileWidth);
 
         return {
             x: col * this.tileWidth + this.tileWidth / 2,
@@ -100,8 +100,8 @@ export default class TileMap extends SceneObject {
     }
 
     public getCollisionType(x: number, y: number): number {
-        const row = Math.trunc(y / this.tileHeight);
-        const col = Math.trunc(x / this.tileWidth);
+        const row = Math.floor(y / this.tileHeight);
+        const col = Math.floor(x / this.tileWidth);
 
         if (row >= 0 && col >= 0 && row < this.mapHeight && col < this.mapWidth) {
             return this.collisionTypeData[row * this.mapWidth + col];

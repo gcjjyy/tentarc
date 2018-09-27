@@ -93,8 +93,8 @@ export default class DosFont extends Font {
         } else if (this.korFontReady) {
             code -= 0xac00;
 
-            const cho = Math.trunc(Math.trunc(code / 28) / 21) + 1;
-            const joong = (Math.trunc(code / 28) % 21) + 1;
+            const cho = Math.floor(Math.floor(code / 28) / 21) + 1;
+            const joong = (Math.floor(code / 28) % 21) + 1;
             const jong = code % 28;
 
             const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];

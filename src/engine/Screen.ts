@@ -165,7 +165,7 @@ export default class Screen {
             this.scale = Math.min(scaleX, scaleY);
 
             if (this.scale >= 1) {
-                this.scale = Math.trunc(this.scale);
+                this.scale = Math.floor(this.scale);
 
                 if (this.context2d) {
                     this.context2d.canvas.width = this.designedWidth * this.scale;
@@ -237,8 +237,8 @@ export default class Screen {
             y -= this.canvas.offsetTop;
         }
 
-        x = Math.trunc(x / this.scale);
-        y = Math.trunc(y / this.scale);
+        x = Math.floor(x / this.scale);
+        y = Math.floor(y / this.scale);
 
         const currentScene = this.getCurrentScene();
         if (currentScene) {
