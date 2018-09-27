@@ -53,8 +53,6 @@ export default class TileMapLayer extends SceneObject {
             const endX = startX + width + 2;
             const endY = startY + height + 2;
 
-            console.log(startX, startY, endX, endY);
-
             const tileSets = parent.getTileSets();
 
             for (let i = startY; i < endY; i++) {

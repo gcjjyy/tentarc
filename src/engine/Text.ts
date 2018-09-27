@@ -24,6 +24,15 @@ export default class Text extends SceneObject {
         return this.fontColor;
     }
 
+    public setText(text: string): Text {
+        this.text = text;
+        return this;
+    }
+
+    public getText(): string {
+        return this.text;
+    }
+
     public onDraw = (screen: Screen): void => {
 
         let x: number = 0;

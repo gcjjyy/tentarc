@@ -84,8 +84,11 @@ export default class GameScene extends Scene {
         this.talk.setRect(0, 48, 240, 96);
         this.talk.setPinned(true);
 
-        this.addSceneObject(this.talk).setPosition(120, 8).addChild(
-            new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;;', 'black').setScale(0.5)
+        this.addSceneObject(this.talk).setPosition(16, 16).addChild(
+            new Text(this.fnt, '[장경돌]\n안녕하세용~ 저는 장경돌 입니다^^;; 반갑습니다.\n 여러분의 성원에 힘입어 이렇게 게임을 만들게 되었습니다. 가나다라마바사아자차카타파하 에헤 우헤우헤우허허 하고싶은 말들은 너무너무 많은데.', 'black')
+                .setScale(0.5)
+                .setPosition(32, 32)
+                .setSize(416, 162)
         );
         this.talk.setVisible(false);
     }
