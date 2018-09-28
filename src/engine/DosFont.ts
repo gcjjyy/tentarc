@@ -27,6 +27,8 @@ export default class DosFont extends Font {
     private engFontReady = false;
     private korFontReady = false;
 
+    private imgData: ImageData | null = null;
+
     constructor(engFilename: string, korFilename: string) {
         super();
 
@@ -89,64 +91,86 @@ export default class DosFont extends Font {
         fontColor: string,
         ch: string): void => {
 
-        let code = ch.charCodeAt(0);
+        if (this.imgData === null) {
+            this.imgData = screen.createImageData(16, 16);
+        }
 
-        if (this.engFontReady && code < 256) {
-            this.drawEngGlyph(sender, screen, x, y, fontColor, code);
-        } else if (this.korFontReady) {
-            code -= 0xac00;
+        if (this.imgData) {
 
-            const cho = Math.floor(Math.floor(code / 28) / 21) + 1;
-            const joong = (Math.floor(code / 28) % 21) + 1;
-            const jong = code % 28;
-
-            const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
-            const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
-            const jongType = DosFont.jongType[joong];
-
-            this.drawKorGlyph(sender, screen, x, y, fontColor, choType * 20 + cho);
-            this.drawKorGlyph(sender, screen, x, y, fontColor, DosFont.indexJoongStart + (joongType * 22 + joong));
-
-            if (jong) {
-                this.drawKorGlyph(sender, screen, x, y, fontColor, DosFont.indexJongStart + (jongType * 28 + jong));
+            /**
+             * Clear ImageData
+             */
+            for (let i = 0; i < 16 * 16 * 4; i++) {
+                this.imgData.data[i] = 0;
             }
+
+            let code = ch.charCodeAt(0);
+
+            if (this.engFontReady && code < 256) {
+                this.drawEngGlyph(this.imgData, fontColor, code);
+            } else if (this.korFontReady) {
+                code -= 0xac00;
+
+                const cho = Math.floor(Math.floor(code / 28) / 21) + 1;
+                const joong = (Math.floor(code / 28) % 21) + 1;
+                const jong = code % 28;
+
+                const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
+                const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
+                const jongType = DosFont.jongType[joong];
+
+                this.drawKorGlyph(this.imgData, fontColor, choType * 20 + cho);
+                this.drawKorGlyph(this.imgData, fontColor, DosFont.indexJoongStart + (joongType * 22 + joong));
+
+                if (jong) {
+                    this.drawKorGlyph(this.imgData, fontColor, DosFont.indexJongStart + (jongType * 28 + jong));
+                }
+            }
+
+            screen.drawImageData(this.imgData, x, y);
         }
     }
 
     private drawEngGlyph(
-        sender: SceneObject,
-        screen: Screen,
-        x: number,
-        y: number,
+        imgData: ImageData,
         fontColor: string,
         code: number): void {
 
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.engFont[code][i] & (0x80 >> j)) {
-                    screen.putPixel(sender, x + j, y + i, fontColor);
+                    const index = ((i << 4) + j) << 2;
+                    imgData.data[index + 0] = 0xff;
+                    imgData.data[index + 1] = 0xff;
+                    imgData.data[index + 2] = 0xff;
+                    imgData.data[index + 3] = 0xff;
                 }
             }
         }
     }
 
     private drawKorGlyph(
-        sender: SceneObject,
-        screen: Screen,
-        x: number,
-        y: number,
+        imgData: ImageData,
         fontColor: string,
         code: number): void {
 
         for (let i = 0; i < 16; i++) {
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x0080 >> j)) {
-                    screen.putPixel(sender, x + j, y + i, fontColor);
+                    const index = ((i << 4) + j) << 2;
+                    imgData.data[index + 0] = 0xff;
+                    imgData.data[index + 1] = 0xff;
+                    imgData.data[index + 2] = 0xff;
+                    imgData.data[index + 3] = 0xff;
                 }
             }
             for (let j = 0; j < 8; j++) {
                 if (this.korFont[code][i] & (0x8000 >> j)) {
-                    screen.putPixel(sender, x + (j + 8), y + i, fontColor);
+                    const index = ((i << 4) + j + 8) << 2;
+                    imgData.data[index + 0] = 0xff;
+                    imgData.data[index + 1] = 0xff;
+                    imgData.data[index + 2] = 0xff;
+                    imgData.data[index + 3] = 0xff;
                 }
             }
         }

@@ -256,21 +256,6 @@ export default class Screen {
         this.gameLoop();
     }
 
-    public putPixel(sender: SceneObject, localX: number, localY: number, color: string) {
-        if (this.context2d) {
-
-            const absx = sender.getGlobalX() + (localX * sender.getScale());
-            const absy = sender.getGlobalY() + (localY * sender.getScale());
-            const absscale = sender.getGlobalScale();
-
-            this.context2d.fillStyle = color;
-            this.context2d.fillRect(
-                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
-                absscale * this.scale, absscale * this.scale);
-        }
-    }
-
     public drawRect(
         sender: SceneObject,
         localX: number,
@@ -317,6 +302,24 @@ export default class Screen {
                 ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
                 width * absscale * this.scale,
                 height * absscale * this.scale);
+        }
+    }
+
+    public createImageData(width: number, height: number): ImageData | null {
+        if (this.context2d) {
+            return this.context2d.createImageData(width, height);
+        }
+        return null;
+    }
+
+    public drawImageData(imgData: ImageData, x: number, y: number) {
+        if (this.context2d) {
+            this.context2d.putImageData(
+                imgData,
+                x, y,
+                0, 0,
+                imgData.width * this.scale,
+                imgData.height * this.scale);
         }
     }
 
