@@ -1,6 +1,6 @@
 import Screen from './Screen';
 import Resource from './Resource';
-import SceneObject from '@/tentarc-engine/SceneObject';
+import SceneObject from './SceneObject';
 
 export default class Font extends Resource {
     constructor() {
