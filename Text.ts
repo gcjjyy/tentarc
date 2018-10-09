@@ -30,6 +30,11 @@ export default class Text extends SceneObject {
         return this;
     }
 
+    public appendText(text: string): Text {
+        this.text += text;
+        return this;
+    }
+
     public getText(): string {
         return this.text;
     }
@@ -49,9 +54,7 @@ export default class Text extends SceneObject {
         let y: number = 0;
 
         for (const ch of this.text) {
-            if (ch === ' ' && x === 0) {
-                continue;
-            } else if (ch === '\n') {
+            if (ch === '\n') {
                 x = 0;
                 y += this.font.getHeight() * this.lineHeight;
             } else {
