@@ -337,6 +337,33 @@ export default class Screen {
         }
     }
 
+    public drawCanvas(
+        sender: SceneObject,
+        canvas: HTMLCanvasElement,
+        sx: number,
+        sy: number,
+        width: number,
+        height: number,
+        localX: number,
+        localY: number): void {
+
+        if (this.context2d) {
+
+            const absx = sender.getGlobalX() + (localX * sender.getScale());
+            const absy = sender.getGlobalY() + (localY * sender.getScale());
+            const absscale = sender.getGlobalScale();
+
+            this.context2d.drawImage(
+                canvas,
+                sx, sy,
+                width, height,
+                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+                width * absscale * this.scale,
+                height * absscale * this.scale);
+        }
+    }
+
     private getCurrentScene(): Scene | null {
         if (this.sceneStack.length > 0) {
             return this.sceneStack[this.sceneStack.length - 1];

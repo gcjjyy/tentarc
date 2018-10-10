@@ -13,11 +13,19 @@ export default class ImageFont extends Font {
     private columns: number = -1;
     private map: Map<string, number> = new Map<string, number>();
 
+    private offscreenElement: HTMLCanvasElement;
+    private offscreen: CanvasRenderingContext2D | null = null;
+
     constructor(imgFilename: string, charListFilename: string, fontWidth: number, fontHeight: number) {
         super();
         this.image = new Image(imgFilename);
         this.fontWidth = fontWidth;
         this.fontHeight = fontHeight;
+
+        this.offscreenElement = document.createElement('canvas');
+        this.offscreenElement.width = this.fontWidth;
+        this.offscreenElement.height = this.fontHeight;
+        this.offscreen = this.offscreenElement.getContext('2d');
 
         const loader = new LocalFileLoader();
         loader.loadAsText(charListFilename, (data: string | null): any => {
@@ -63,28 +71,30 @@ export default class ImageFont extends Font {
         }
 
         if (index !== undefined) {
-            /**
-             * Draw white text first
-             */
-            screen.drawImage(
+
+            if (this.offscreen) {
+                this.offscreen.globalCompositeOperation = 'source-over';
+                this.offscreen.fillStyle = fontColor;
+                this.offscreen.fillRect(0, 0, this.fontWidth, this.fontHeight);
+                this.offscreen.globalCompositeOperation = 'destination-atop';
+                this.offscreen.drawImage(
+                    this.image.getImageElement(),
+                    (index % this.columns) * this.fontWidth,
+                    Math.floor(index / this.columns) * this.fontHeight,
+                    this.fontWidth,
+                    this.fontHeight,
+                    0, 0,
+                    this.fontWidth,
+                    this.fontHeight);
+            }
+
+            screen.drawCanvas(
                 sender,
-                this.image,
-                (index % this.columns) * this.fontWidth,
-                Math.floor(index / this.columns) * this.fontHeight,
+                this.offscreenElement,
+                0, 0,
                 this.fontWidth,
                 this.fontHeight,
                 x, y);
-
-            /**
-             * After that, multiply color by a rectangle
-             */
-            // screen.setGlobalCompositeOperation('multiply', fontColor);
-            // screen.drawRect(sender, x, y, this.fontWidth, this.fontHeight);
-
-            /**
-             * Restore default composite operation(source over)
-             */
-            screen.setGlobalCompositeOperation('source-over', fontColor);
         }
     }
 }
