@@ -72,26 +72,11 @@ export default class ImageFont extends Font {
 
         if (index !== undefined) {
 
-            if (this.offscreen) {
-                this.offscreen.globalCompositeOperation = 'source-over';
-                this.offscreen.fillStyle = fontColor;
-                this.offscreen.fillRect(0, 0, this.fontWidth, this.fontHeight);
-                this.offscreen.globalCompositeOperation = 'destination-atop';
-                this.offscreen.drawImage(
-                    this.image.getImageElement(),
-                    (index % this.columns) * this.fontWidth,
-                    Math.floor(index / this.columns) * this.fontHeight,
-                    this.fontWidth,
-                    this.fontHeight,
-                    0, 0,
-                    this.fontWidth,
-                    this.fontHeight);
-            }
-
-            screen.drawCanvas(
+            screen.drawImage(
                 sender,
-                this.offscreenElement,
-                0, 0,
+                this.image,
+                (index % this.columns) * this.fontWidth,
+                Math.floor(index / this.columns) * this.fontHeight,
                 this.fontWidth,
                 this.fontHeight,
                 x, y);
