@@ -269,12 +269,11 @@ export default class Screen {
         }
     }
 
-    public multiplyColor(color: string): void {
+    public setGlobalCompositeOperation(op: string, color: string): void {
         if (this.context2d) {
-            this.context2d.globalCompositeOperation = 'multiply';
+            this.context2d.globalCompositeOperation = op;
             this.context2d.fillStyle = color;
         }
-
     }
 
     public putPixel(sender: SceneObject, localX: number, localY: number) {

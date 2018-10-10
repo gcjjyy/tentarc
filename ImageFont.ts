@@ -49,29 +49,42 @@ export default class ImageFont extends Font {
         fontColor: string,
         ch: string): void => {
 
-            const index = this.map.get(ch);
-            if (index === undefined) {
-                return;
-            }
+        const index = this.map.get(ch);
+        if (index === undefined) {
+            return;
+        }
+
+        /**
+         * On constructor this.columns cannot be calculated.
+         * So, the member varaible should be assigned when available.
+         */
+        if (this.columns < 0) {
+            this.columns = Math.floor(this.image.getWidth() / this.fontWidth);
+        }
+
+        if (index !== undefined) {
+            /**
+             * Draw white text first
+             */
+            screen.drawImage(
+                sender,
+                this.image,
+                (index % this.columns) * this.fontWidth,
+                Math.floor(index / this.columns) * this.fontHeight,
+                this.fontWidth,
+                this.fontHeight,
+                x, y);
 
             /**
-             * On constructor this.columns cannot be calculated.
-             * So, the member varaible should be assigned when available.
+             * After that, multiply color by a rectangle
              */
-            if (this.columns < 0) {
-                this.columns = Math.floor(this.image.getWidth() / this.fontWidth);
-            }
+            // screen.setGlobalCompositeOperation('multiply', fontColor);
+            // screen.drawRect(sender, x, y, this.fontWidth, this.fontHeight);
 
-            if (index !== undefined) {
-                screen.drawImage(
-                    sender,
-                    this.image,
-                    (index % this.columns) * this.fontWidth,
-                    Math.floor(index / this.columns) * this.fontHeight,
-                    this.fontWidth,
-                    this.fontHeight,
-                    x, y);
-
+            /**
+             * Restore default composite operation(source over)
+             */
+            screen.setGlobalCompositeOperation('source-over', fontColor);
         }
     }
 }

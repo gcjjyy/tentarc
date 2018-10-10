@@ -74,7 +74,7 @@ export default class Text extends SceneObject {
                 y += this.font.getHeight() * this.lineHeight;
             } else {
                 if (this.backgroundColor !== undefined) {
-                    screen.drawRect(this, x, y, this.font.getWidth(ch), this.font.getHeight());
+                    // screen.drawRect(this, x, y, this.font.getWidth(ch), this.font.getHeight());
                 }
 
                 this.font.drawGlyph(this, screen, x, y, this.fontColor, ch);
