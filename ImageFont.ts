@@ -5,6 +5,8 @@ import SceneObject from './SceneObject';
 import LocalFileLoader from './LocalFileLoader';
 
 export default class ImageFont extends Font {
+    public onGetWidth: ((ch: string, fontWidth: number) => number) | null = null;
+
     private image: Image;
     private fontWidth: number;
     private fontHeight: number;
@@ -28,10 +30,11 @@ export default class ImageFont extends Font {
     }
 
     public getWidth = (ch: string): number => {
-        if (ch.charCodeAt(0) >= 0 && ch.charCodeAt(0) < 256) {
-            return (this.fontWidth >> 1);
+        if (this.onGetWidth) {
+            return this.onGetWidth(ch, this.fontWidth);
+        } else {
+            return this.fontWidth;
         }
-        return this.fontWidth;
     }
 
     public getHeight = (): number => {
