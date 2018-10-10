@@ -50,6 +50,12 @@ export default class ImageFont extends Font {
         ch: string): void => {
 
             const index = this.map.get(ch);
+            if (index === undefined) {
+                return;
+            }
+
+            screen.save();
+            screen.multiplyColor(fontColor);
 
             /**
              * On constructor this.columns cannot be calculated.
@@ -68,6 +74,9 @@ export default class ImageFont extends Font {
                     this.fontWidth,
                     this.fontHeight,
                     x, y);
+
+
+            screen.restore();
         }
     }
 }

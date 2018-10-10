@@ -6,6 +6,7 @@ export default class Text extends SceneObject {
     private font: Font;
     private text: string;
     private fontColor: string;
+    private backgroundColor: string | undefined = undefined;
     private lineHeight: number = 1;
 
     constructor(font: Font, text: string, fontColor: string = 'white', width: number = 0, height: number = 0) {
@@ -23,6 +24,15 @@ export default class Text extends SceneObject {
 
     public getFontColor(): string {
         return this.fontColor;
+    }
+
+    public setBackgroundColor(backgroundColor: string | undefined): Text {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+    public getBackgroundColor(): string | undefined {
+        return this.backgroundColor;
     }
 
     public setText(text: string): Text {
@@ -53,12 +63,22 @@ export default class Text extends SceneObject {
         let x: number = 0;
         let y: number = 0;
 
+        if (this.backgroundColor !== undefined) {
+            screen.save();
+            screen.setFillStyle(this.backgroundColor);
+        }
+
         for (const ch of this.text) {
             if (ch === '\n') {
                 x = 0;
                 y += this.font.getHeight() * this.lineHeight;
             } else {
+                if (this.backgroundColor !== undefined) {
+                    screen.drawRect(this, x, y, this.font.getWidth(ch), this.font.getHeight());
+                }
+
                 this.font.drawGlyph(this, screen, x, y, this.fontColor, ch);
+
                 if (this.getWidth() === 0 || (x + this.font.getWidth(ch) < this.getWidth())) {
                     x += this.font.getWidth(ch);
                 } else {
@@ -66,6 +86,10 @@ export default class Text extends SceneObject {
                     y += this.font.getHeight() * this.lineHeight;
                 }
             }
+        }
+
+        if (this.backgroundColor !== undefined) {
+            screen.restore();
         }
     }
 }
