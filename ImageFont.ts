@@ -54,9 +54,6 @@ export default class ImageFont extends Font {
                 return;
             }
 
-            screen.save();
-            screen.multiplyColor(fontColor);
-
             /**
              * On constructor this.columns cannot be calculated.
              * So, the member varaible should be assigned when available.
@@ -75,8 +72,6 @@ export default class ImageFont extends Font {
                     this.fontHeight,
                     x, y);
 
-
-            screen.restore();
         }
     }
 }
