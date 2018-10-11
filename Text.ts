@@ -17,6 +17,15 @@ export default class Text extends SceneObject {
         this.fontColor = fontColor;
     }
 
+    public setFont(font: Font): Text {
+        this.font = font;
+        return this;
+    }
+
+    public getFont(): Font {
+        return this.font;
+    }
+
     public setFontColor(fontColor: string): Text {
         this.fontColor = fontColor;
         return this;
