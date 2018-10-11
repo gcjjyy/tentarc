@@ -63,17 +63,16 @@ export default class Text extends SceneObject {
         let x: number = 0;
         let y: number = 0;
 
-        if (this.backgroundColor !== undefined) {
-            screen.save();
-            screen.setFillStyle(this.backgroundColor);
-        }
+        const oldFillStyle = screen.getFillStyle();
 
         for (const ch of this.text) {
             if (ch === '\n') {
                 x = 0;
                 y += this.font.getHeight() * this.lineHeight;
             } else {
+
                 if (this.backgroundColor !== undefined) {
+                    screen.setFillStyle(this.backgroundColor);
                     screen.drawRect(this, x, y, this.font.getWidth(ch), this.font.getHeight());
                 }
 
@@ -88,8 +87,6 @@ export default class Text extends SceneObject {
             }
         }
 
-        if (this.backgroundColor !== undefined) {
-            screen.restore();
-        }
+        screen.setFillStyle(oldFillStyle);
     }
 }

@@ -14,6 +14,7 @@ export default class Screen {
     private canvas: HTMLCanvasElement | null = null;
     private context2d: CanvasRenderingContext2D | null = null;
     private scale: number = 1;
+    private fillStyle: string = 'white';
 
     private sceneStack: Scene[] = [];
     private lastTime: number;
@@ -253,8 +254,13 @@ export default class Screen {
 
     public setFillStyle(style: string): void {
         if (this.context2d) {
+            this.fillStyle = style;
             this.context2d.fillStyle = style;
         }
+    }
+
+    public getFillStyle(): string {
+        return this.fillStyle;
     }
 
     public save(): void {
