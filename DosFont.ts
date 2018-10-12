@@ -14,8 +14,10 @@ export default class DosFont extends Font {
         0, 0, 2, 0, 2, 1, 2, 1, 2, 3, 0, 2, 1, 3, 3, 1, 2, 1, 3, 3, 1, 1,
     ];
     private static jamoTable: number[] = [
-        1, 2, 0, 3, 0, 0,  4,  5,  6,  0,  0,  0,  0,  0,  0,
+        0, 1, 2, 0, 3, 0, 0, 4, 5, 6, 0, 0, 0, 0, 0, 0,
         0, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171,
+        172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182
     ];
 
     private static indexJoongStart = 160;
@@ -95,21 +97,28 @@ export default class DosFont extends Font {
         if (this.engFontReady && code < 256) {
             this.drawEngGlyph(sender, screen, x, y, code);
         } else if (this.korFontReady) {
-            code -= 0xac00;
 
-            const cho = Math.floor(Math.floor(code / 28) / 21) + 1;
-            const joong = (Math.floor(code / 28) % 21) + 1;
-            const jong = code % 28;
+            if (code >= 0x3130 && code <= 0x318f) {
+                console.log('ch:', ch, 'code:', code.toString(16));
+                code = code - 0x3130;
+                this.drawKorGlyph(sender, screen, x, y, DosFont.jamoTable[code]);
+            } else if (code >= 0xac00 && code <= 0xd7af) {
+                code = code - 0xac00;
 
-            const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
-            const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
-            const jongType = DosFont.jongType[joong];
+                const cho = Math.floor(Math.floor(code / 28) / 21) + 1;
+                const joong = (Math.floor(code / 28) % 21) + 1;
+                const jong = code % 28;
 
-            this.drawKorGlyph(sender, screen, x, y, choType * 20 + cho);
-            this.drawKorGlyph(sender, screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+                const choType = (jong) ? DosFont.choTypeJongExist[joong] : DosFont.choType[joong];
+                const joongType = ((cho === 1 || cho === 16) ? 0 : 1) + (jong ? 2 : 0);
+                const jongType = DosFont.jongType[joong];
 
-            if (jong) {
-                this.drawKorGlyph(sender, screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                this.drawKorGlyph(sender, screen, x, y, choType * 20 + cho);
+                this.drawKorGlyph(sender, screen, x, y, DosFont.indexJoongStart + (joongType * 22 + joong));
+
+                if (jong) {
+                    this.drawKorGlyph(sender, screen, x, y, DosFont.indexJongStart + (jongType * 28 + jong));
+                }
             }
         }
     }
