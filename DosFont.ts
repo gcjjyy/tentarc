@@ -99,7 +99,6 @@ export default class DosFont extends Font {
         } else if (this.korFontReady) {
 
             if (code >= 0x3130 && code <= 0x318f) {
-                console.log('ch:', ch, 'code:', code.toString(16));
                 code = code - 0x3130;
                 this.drawKorGlyph(sender, screen, x, y, DosFont.jamoTable[code]);
             } else if (code >= 0xac00 && code <= 0xd7af) {
