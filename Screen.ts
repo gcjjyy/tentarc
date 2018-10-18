@@ -60,9 +60,7 @@ export default class Screen {
     }
 
     public redraw(): void {
-        if (this.context2d) {
-            this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
-        }
+        this.context2d!.clearRect(0, 0, this.context2d!.canvas.width, this.context2d!.canvas.height);
     }
 
     public pushScene(scene: Scene): Scene {
@@ -116,38 +114,36 @@ export default class Screen {
             this.frames = 0;
         }
 
-        if (this.context2d) {
-            this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
+        this.context2d!.clearRect(0, 0, this.context2d!.canvas.width, this.context2d!.canvas.height);
 
-            const currentScene = this.getCurrentScene();
-            if (currentScene) {
-                currentScene.update(dt);
+        const currentScene = this.getCurrentScene();
+        if (currentScene) {
+            currentScene.update(dt);
 
-                /**
-                 * this.objectList: The list contains objects to draw to screen.
-                 */
-                this.objectList = [];
-                currentScene.traverse(this.objectList);
+            /**
+             * this.objectList: The list contains objects to draw to screen.
+             */
+            this.objectList = [];
+            currentScene.traverse(this.objectList);
 
-                // Sort the list by sortIndex
-                this.objectList.sort((a: SceneObject, b: SceneObject): number => {
-                    if (a.getGlobalSortIndex() < b.getGlobalSortIndex()) {
+            // Sort the list by sortIndex
+            this.objectList.sort((a: SceneObject, b: SceneObject): number => {
+                if (a.getGlobalSortIndex() < b.getGlobalSortIndex()) {
+                    return -1;
+                } else if (a.getGlobalSortIndex() === b.getGlobalSortIndex()) {
+                    if (a.getGlobalY() <= b.getGlobalY()) {
                         return -1;
-                    } else if (a.getGlobalSortIndex() === b.getGlobalSortIndex()) {
-                        if (a.getGlobalY() <= b.getGlobalY()) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
                     } else {
                         return 1;
                     }
-                });
+                } else {
+                    return 1;
+                }
+            });
 
-                for (const object of this.objectList) {
-                    if (object.onDraw) {
-                        object.onDraw(this);
-                    }
+            for (const object of this.objectList) {
+                if (object.onDraw) {
+                    object.onDraw(this);
                 }
             }
         }
@@ -158,34 +154,28 @@ export default class Screen {
     }
 
     public refreshScreenSize(): void {
-        if (this.canvas && this.canvas.parentElement && this.onResize) {
-            this.onResize(this.canvas.parentElement.clientWidth, this.canvas.parentElement.clientHeight);
+        if (this.onResize) {
+            this.onResize(this.canvas!.parentElement!.clientWidth, this.canvas!.parentElement!.clientHeight);
         }
         this.recalcScreenSize();
     }
 
     public recalcScreenSize(): void {
-        if (this.canvas && this.canvas.parentElement) {
-            const scaleX: number = this.canvas.parentElement.clientWidth / this.designedWidth;
-            const scaleY: number = this.canvas.parentElement.clientHeight / this.designedHeight;
+        const scaleX: number = this.canvas!.parentElement!.clientWidth / this.designedWidth;
+        const scaleY: number = this.canvas!.parentElement!.clientHeight / this.designedHeight;
 
-            this.scale = Math.min(scaleX, scaleY);
+        this.scale = Math.min(scaleX, scaleY);
 
-            if (this.scale >= 1) {
-                this.scale = Math.floor(this.scale);
+        if (this.scale >= 1) {
+            this.scale = Math.floor(this.scale);
 
-                if (this.context2d) {
-                    this.context2d.canvas.width = this.designedWidth * this.scale;
-                    this.context2d.canvas.height = this.designedHeight * this.scale;
-                    this.context2d.imageSmoothingEnabled = false;
-                }
-            } else {
-                if (this.context2d) {
-                    this.context2d.canvas.width = this.designedWidth * this.scale;
-                    this.context2d.canvas.height = this.designedHeight * this.scale;
-                    this.context2d.imageSmoothingEnabled = true;
-                }
-            }
+            this.context2d!.canvas.width = this.designedWidth * this.scale;
+            this.context2d!.canvas.height = this.designedHeight * this.scale;
+            this.context2d!.imageSmoothingEnabled = false;
+        } else {
+            this.context2d!.canvas.width = this.designedWidth * this.scale;
+            this.context2d!.canvas.height = this.designedHeight * this.scale;
+            this.context2d!.imageSmoothingEnabled = true;
         }
 
         for (const scene of this.sceneStack) {
@@ -264,9 +254,9 @@ export default class Screen {
     }
 
     public setFillStyle(style: string): void {
-        if (this.context2d && style !== this.fillStyle) {
+        if (style !== this.fillStyle) {
             this.fillStyle = style;
-            this.context2d.fillStyle = style;
+            this.context2d!.fillStyle = style;
         }
     }
 
@@ -274,36 +264,20 @@ export default class Screen {
         return this.fillStyle;
     }
 
-    public save(): void {
-        if (this.context2d) {
-            this.context2d.save();
-        }
-    }
-
-    public restore(): void {
-        if (this.context2d) {
-            this.context2d.restore();
-        }
-    }
-
     public setGlobalCompositeOperation(op: string, color: string): void {
-        if (this.context2d) {
-            this.context2d.globalCompositeOperation = op;
-            this.context2d.fillStyle = color;
-        }
+        this.context2d!.globalCompositeOperation = op;
+        this.context2d!.fillStyle = color;
     }
 
     public putPixel(sender: SceneObject, localX: number, localY: number) {
-        if (this.context2d) {
-            const absx = sender.getGlobalX() + (localX * sender.getScale());
-            const absy = sender.getGlobalY() + (localY * sender.getScale());
-            const absscale = sender.getGlobalScale();
+        const absx = sender.getGlobalX() + (localX * sender.getScale());
+        const absy = sender.getGlobalY() + (localY * sender.getScale());
+        const absscale = sender.getGlobalScale();
 
-            this.context2d.fillRect(
-                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
-                absscale * this.scale, absscale * this.scale);
-        }
+        this.context2d!.fillRect(
+            ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+            ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+            absscale * this.scale, absscale * this.scale);
     }
 
     public drawRect(
@@ -312,18 +286,16 @@ export default class Screen {
         localY: number,
         width: number,
         height: number): void {
-        if (this.context2d) {
 
-            const absx = sender.getGlobalX() + (localX * sender.getScale());
-            const absy = sender.getGlobalY() + (localY * sender.getScale());
-            const absscale = sender.getGlobalScale();
+        const absx = sender.getGlobalX() + (localX * sender.getScale());
+        const absy = sender.getGlobalY() + (localY * sender.getScale());
+        const absscale = sender.getGlobalScale();
 
-            this.context2d.fillRect(
-                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
-                width * absscale * this.scale,
-                height * absscale * this.scale);
-        }
+        this.context2d!.fillRect(
+            ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+            ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+            width * absscale * this.scale,
+            height * absscale * this.scale);
     }
 
     public drawImage(
@@ -336,21 +308,18 @@ export default class Screen {
         localX: number,
         localY: number): void {
 
-        if (this.context2d) {
+        const absx = sender.getGlobalX() + (localX * sender.getScale());
+        const absy = sender.getGlobalY() + (localY * sender.getScale());
+        const absscale = sender.getGlobalScale();
 
-            const absx = sender.getGlobalX() + (localX * sender.getScale());
-            const absy = sender.getGlobalY() + (localY * sender.getScale());
-            const absscale = sender.getGlobalScale();
-
-            this.context2d.drawImage(
-                image.getImageElement(),
-                sx, sy,
-                width, height,
-                ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
-                ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
-                width * absscale * this.scale,
-                height * absscale * this.scale);
-        }
+        this.context2d!.drawImage(
+            image.getImageElement(),
+            sx, sy,
+            width, height,
+            ((sender.getPinned()) ? absx : (absx - this.viewportX)) * this.scale,
+            ((sender.getPinned()) ? absy : (absy - this.viewportY)) * this.scale,
+            width * absscale * this.scale,
+            height * absscale * this.scale);
     }
 
     private getCurrentScene(): Scene | null {
