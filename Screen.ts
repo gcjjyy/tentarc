@@ -18,6 +18,8 @@ export default class Screen {
 
     private sceneStack: Scene[] = [];
     private lastTime: number;
+    private second: number = 1;
+    private frames: number = 0;
     private objectList: SceneObject[] = [];
 
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
@@ -107,6 +109,13 @@ export default class Screen {
         const dt: number = (Date.now() - this.lastTime) / 1000;
         this.lastTime = Date.now();
 
+        this.second -= dt;
+        if (this.second <= 0) {
+            console.log('fps:', this.frames);
+            this.second += 1;
+            this.frames = 0;
+        }
+
         if (this.context2d) {
             this.context2d.clearRect(0, 0, this.context2d.canvas.width, this.context2d.canvas.height);
 
@@ -142,6 +151,8 @@ export default class Screen {
                 }
             }
         }
+
+        this.frames++;
 
         requestAnimationFrame(() => { this.gameLoop(); });
     }
@@ -253,7 +264,7 @@ export default class Screen {
     }
 
     public setFillStyle(style: string): void {
-        if (this.context2d) {
+        if (this.context2d && style !== this.fillStyle) {
             this.fillStyle = style;
             this.context2d.fillStyle = style;
         }
@@ -284,7 +295,6 @@ export default class Screen {
 
     public putPixel(sender: SceneObject, localX: number, localY: number) {
         if (this.context2d) {
-
             const absx = sender.getGlobalX() + (localX * sender.getScale());
             const absy = sender.getGlobalY() + (localY * sender.getScale());
             const absscale = sender.getGlobalScale();
