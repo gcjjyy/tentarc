@@ -14,7 +14,7 @@ export default class Screen {
     private canvas: HTMLCanvasElement | null = null;
     private context2d: CanvasRenderingContext2D | null = null;
     private scale: number = 1;
-    private fillStyle: string = 'white';
+    private fillStyle: string = 'unknown';
 
     private sceneStack: Scene[] = [];
     private lastTime: number;
@@ -109,7 +109,9 @@ export default class Screen {
 
         this.second -= dt;
         if (this.second <= 0) {
-            console.log('fps:', this.frames);
+            if (process.env.NODE_ENV !== 'production') {
+                console!.log('fps:', this.frames);
+            }
             this.second += 1;
             this.frames = 0;
         }
@@ -254,10 +256,8 @@ export default class Screen {
     }
 
     public setFillStyle(style: string): void {
-        if (style !== this.fillStyle) {
-            this.fillStyle = style;
-            this.context2d!.fillStyle = style;
-        }
+        this.fillStyle = style;
+        this.context2d!.fillStyle = style;
     }
 
     public getFillStyle(): string {

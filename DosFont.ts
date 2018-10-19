@@ -3,6 +3,12 @@ import Screen from './Screen';
 import LocalFileLoader from './LocalFileLoader';
 import SceneObject from './SceneObject';
 
+/**
+ * Important!!
+ * -----------
+ * DosFont is drawing so many fillRects, so performance is very bad.
+ * Please consider it.
+ */
 export default class DosFont extends Font {
     private static choType: number[] = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 1, 2, 4, 4, 4, 2, 1, 3, 0,

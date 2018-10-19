@@ -31,7 +31,9 @@ export default class ImageFont extends Font {
         loader.loadAsText(charListFilename, (data: string | null): any => {
             if (data) {
                 for (let i = 0; i < data.length; i++) {
-                    this.map.set(data[i], i);
+                    if (this.map.get(data[i]) === undefined) {
+                        this.map.set(data[i], i);
+                    }
                 }
             }
         });

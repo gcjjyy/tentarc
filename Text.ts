@@ -72,8 +72,6 @@ export default class Text extends SceneObject {
         let x: number = 0;
         let y: number = 0;
 
-        const oldFillStyle = screen.getFillStyle();
-
         for (const ch of this.text) {
             if (ch === '\n') {
                 x = 0;
@@ -95,7 +93,5 @@ export default class Text extends SceneObject {
                 }
             }
         }
-
-        screen.setFillStyle(oldFillStyle);
     }
 }
