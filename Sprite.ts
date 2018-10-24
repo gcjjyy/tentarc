@@ -15,10 +15,11 @@ export default class Sprite extends SceneObject {
         this.image = image;
     }
 
-    public onUpdate = (dt: number): void => {
+    public onUpdate = (dt: number): boolean => {
         if (this.animations.length > 0) {
-            this.animations[this.curAnimation].onUpdate(dt);
+            return this.animations[this.curAnimation].onUpdate(dt);
         }
+        return false;
     }
 
     public onDraw = (screen: Screen): void => {

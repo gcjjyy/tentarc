@@ -1,7 +1,7 @@
 import Screen from './Screen';
 
 export default class SceneObject {
-    public onUpdate: ((dt: number) => void) | null = null;
+    public onUpdate: ((dt: number) => boolean) | null = null;
     public onDraw: ((screen: Screen) => void) | null = null;
     public onMouseDown: ((x: number, y: number) => void) | null = null;
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
@@ -17,6 +17,7 @@ export default class SceneObject {
     private parent: SceneObject | null = null;
     private childs: SceneObject[] = [];
     private pinned: boolean = false;
+    public needRedraw = true;
 
     constructor(width: number, height: number) {
         this.setWidth(width);
@@ -24,6 +25,10 @@ export default class SceneObject {
     }
 
     public setPosition(x: number, y: number): SceneObject {
+        if (this.x !== x || this.y !== y) {
+            this.redraw();
+        }
+
         this.x = x;
         this.y = y;
 
@@ -31,16 +36,28 @@ export default class SceneObject {
     }
 
     public setX(x: number): SceneObject {
+        if (this.x !== x) {
+            this.redraw();
+        }
+
         this.x = x;
         return this;
     }
 
     public setY(y: number): SceneObject {
+        if (this.y !== y) {
+            this.redraw();
+        }
+
         this.y = y;
         return this;
     }
 
     public setPinned(pinned: boolean): SceneObject {
+        if (this.pinned !== pinned) {
+            this.redraw();
+        }
+
         this.pinned = pinned;
         return this;
     }
@@ -54,17 +71,29 @@ export default class SceneObject {
     }
 
     public setSize(width: number, height: number): SceneObject {
+        if (this.width !== width || this.height !== height) {
+            this.redraw();
+        }
+
         this.width = width;
         this.height = height;
         return this;
     }
 
     public setWidth(width: number): SceneObject {
+        if (this.width !== width) {
+            this.redraw();
+        }
+
         this.width = width;
         return this;
     }
 
     public setHeight(height: number): SceneObject {
+        if (this.height !== height) {
+            this.redraw();
+        }
+
         this.height = height;
         return this;
     }
@@ -92,6 +121,10 @@ export default class SceneObject {
     }
 
     public setScale(scale: number): SceneObject {
+        if (this.scale !== scale) {
+            this.redraw();
+        }
+
         this.scale = scale;
         return this;
     }
@@ -109,6 +142,10 @@ export default class SceneObject {
     }
 
     public setSortIndex(sortIndex: number): SceneObject {
+        if (this.sortIndex !== sortIndex) {
+            this.redraw();
+        }
+
         this.sortIndex = sortIndex;
         return this;
     }
@@ -126,6 +163,10 @@ export default class SceneObject {
     }
 
     public setVisible(visible: boolean): SceneObject {
+        if (this.visible !== visible) {
+            this.redraw();
+        }
+
         this.visible = visible;
         return this;
     }
@@ -135,6 +176,10 @@ export default class SceneObject {
     }
 
     public setParent(object: SceneObject | null): SceneObject {
+        if (this.parent !== object) {
+            this.redraw();
+        }
+
         this.parent = object;
         return this;
     }
@@ -144,12 +189,14 @@ export default class SceneObject {
     }
 
     public addChild(object: SceneObject): SceneObject {
+        this.redraw();
+
         object.setParent(this);
         this.childs.push(object);
         return object;
     }
 
-    public traverse(list: SceneObject[]): void {
+    public traverse(list: SceneObject[]) {
         if (this.visible) {
             list.push(this);
             for (const child of this.childs) {
@@ -158,14 +205,27 @@ export default class SceneObject {
         }
     }
 
-    public update(dt: number): void {
+    public redraw() {
+        this.needRedraw = true;
+    }
+
+    public update(dt: number): boolean {
+        let result = this.needRedraw;
+
         if (this.onUpdate) {
-            this.onUpdate(dt);
+            if (this.onUpdate(dt)) {
+                result = true;
+            }
         }
 
         for (const child of this.childs) {
-            child.update(dt);
+            if (child.update(dt)) {
+                result = true;
+            }
         }
+
+        this.needRedraw = false;
+        return result;
     }
 
     public pickSceneObject(x: number, y: number): SceneObject | null {

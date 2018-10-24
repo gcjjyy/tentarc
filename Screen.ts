@@ -20,7 +20,7 @@ export default class Screen {
     private lastTime: number;
     private second: number = 1;
     private frames: number = 0;
-    private objectList: SceneObject[] = [];
+    private objectListToDraw: SceneObject[] = [];
 
     constructor(canvasId: string, designedWidth: number, designedHeight: number) {
         this.lastTime = Date.now();
@@ -57,10 +57,6 @@ export default class Screen {
         window.addEventListener('keyup', (ev: KeyboardEvent) => {
             this.onKeyUp(ev);
         });
-    }
-
-    public redraw(): void {
-        this.context2d!.clearRect(0, 0, this.context2d!.canvas.width, this.context2d!.canvas.height);
     }
 
     public pushScene(scene: Scene): Scene {
@@ -103,33 +99,17 @@ export default class Screen {
         return this.scale;
     }
 
-    public gameLoop(): void {
-        const dt: number = (Date.now() - this.lastTime) / 1000;
-        this.lastTime = Date.now();
-
-        this.second -= dt;
-        if (this.second <= 0) {
-            if (process.env.NODE_ENV !== 'production') {
-                console!.log('fps:', this.frames);
-            }
-            this.second += 1;
-            this.frames = 0;
-        }
-
+    public redraw(): void {
         this.context2d!.clearRect(0, 0, this.context2d!.canvas.width, this.context2d!.canvas.height);
 
         const currentScene = this.getCurrentScene();
         if (currentScene) {
-            currentScene.update(dt);
 
-            /**
-             * this.objectList: The list contains objects to draw to screen.
-             */
-            this.objectList = [];
-            currentScene.traverse(this.objectList);
+            this.objectListToDraw = [];
+            currentScene.traverse(this.objectListToDraw);
 
             // Sort the list by sortIndex
-            this.objectList.sort((a: SceneObject, b: SceneObject): number => {
+            this.objectListToDraw.sort((a: SceneObject, b: SceneObject): number => {
                 if (a.getGlobalSortIndex() < b.getGlobalSortIndex()) {
                     return -1;
                 } else if (a.getGlobalSortIndex() === b.getGlobalSortIndex()) {
@@ -143,10 +123,31 @@ export default class Screen {
                 }
             });
 
-            for (const object of this.objectList) {
+            for (const object of this.objectListToDraw) {
                 if (object.onDraw) {
                     object.onDraw(this);
                 }
+            }
+        }
+    }
+
+    public gameLoop(): void {
+        const dt: number = (Date.now() - this.lastTime) / 1000;
+        this.lastTime = Date.now();
+
+        this.second -= dt;
+        if (this.second <= 0) {
+            if (process.env.NODE_ENV !== 'production') {
+                console!.log('fps:', this.frames);
+            }
+            this.second += 1;
+            this.frames = 0;
+        }
+
+        const currentScene = this.getCurrentScene();
+        if (currentScene) {
+            if (currentScene.update(dt)) {
+                this.redraw();
             }
         }
 
