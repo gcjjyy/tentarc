@@ -7,6 +7,7 @@ export default class SceneObject {
     public onKeyDown: ((key: string, keyCode: number) => void) | null = null;
     public onKeyUp: ((key: string, keyCode: number) => void) | null = null;
 
+    private needRedraw = true;
     private x: number = 0;
     private y: number = 0;
     private width: number = 0;
@@ -17,7 +18,6 @@ export default class SceneObject {
     private parent: SceneObject | null = null;
     private childs: SceneObject[] = [];
     private pinned: boolean = false;
-    public needRedraw = true;
 
     constructor(width: number, height: number) {
         this.setWidth(width);
@@ -98,6 +98,9 @@ export default class SceneObject {
         return this;
     }
 
+    public getNeedRedraw(): boolean {
+        return this.needRedraw;
+    }
 
     public getX(): number { return this.x; }
     public getY(): number { return this.y; }

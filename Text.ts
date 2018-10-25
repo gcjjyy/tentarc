@@ -19,6 +19,7 @@ export default class Text extends SceneObject {
 
     public setFont(font: Font): Text {
         this.font = font;
+        this.redraw();
         return this;
     }
 
@@ -28,6 +29,7 @@ export default class Text extends SceneObject {
 
     public setFontColor(fontColor: string): Text {
         this.fontColor = fontColor;
+        this.redraw();
         return this;
     }
 
@@ -37,6 +39,7 @@ export default class Text extends SceneObject {
 
     public setBackgroundColor(backgroundColor: string | undefined): Text {
         this.backgroundColor = backgroundColor;
+        this.redraw();
         return this;
     }
 
@@ -46,11 +49,13 @@ export default class Text extends SceneObject {
 
     public setText(text: string): Text {
         this.text = text;
+        this.redraw();
         return this;
     }
 
     public appendText(text: string): Text {
         this.text += text;
+        this.redraw();
         return this;
     }
 
@@ -60,6 +65,7 @@ export default class Text extends SceneObject {
 
     public setLineHeight(lineHeight: number): Text {
         this.lineHeight = lineHeight;
+        this.redraw();
         return this;
     }
 

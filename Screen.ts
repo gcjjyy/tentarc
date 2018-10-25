@@ -185,6 +185,8 @@ export default class Screen {
             scene.setWidth(this.designedWidth);
             scene.setHeight(this.designedHeight);
         }
+
+        this.redraw();
     }
 
     public setDesignedScreenSize(designedWidth: number, designedHeight: number): void {
@@ -196,14 +198,18 @@ export default class Screen {
     public setViewportPosition(x: number, y: number): void {
         this.viewportX = x;
         this.viewportY = y;
+
+        this.redraw();
     }
 
     public setViewportX(x: number): void {
         this.viewportX = x;
+        this.redraw();
     }
 
     public setViewportY(y: number): void {
         this.viewportY = y;
+        this.redraw();
     }
 
     public getViewportX(): number {
